@@ -3,7 +3,6 @@ module Matrix_IO
 
    implicit none
 contains
-   ! Чтение параметра p.
    subroutine ReadMatrix(input_file, Matrix, N, M)
       character(*), intent(in) :: input_file
       integer, intent(out)     :: N, M
