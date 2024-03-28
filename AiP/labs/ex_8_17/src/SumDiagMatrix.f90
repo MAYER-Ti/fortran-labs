@@ -7,9 +7,9 @@ module SumDiagMatrix
    implicit none
 
 contains
-   real(R_) function SumDiag(Matrix) result(res)
+   pure subroutine SumDiag(Matrix, res)
       real(R_), contiguous, target, intent(inout)    :: Matrix(:,:)
-
+      real(R_), intent(out) :: res
       integer :: N, i
       real(R_), pointer :: array(:)
 
@@ -18,6 +18,6 @@ contains
       do i = 1, N*N, N+1
          res = res + array(i) 
       end do
-   end function SumDiag
+   end subroutine SumDiag
 
 end module SumDiagMatrix 

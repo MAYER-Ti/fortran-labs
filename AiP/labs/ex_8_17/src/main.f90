@@ -32,9 +32,9 @@ program exercise_8_17
    call WriteMatrix(output_file, D)
 
    ! Обработка данных
-   sumA = SumDiag(A)
-   sumC = SumDiag(C)
-   sumD = SumDiag(D) 
+   call SumDiag(A, sumA)
+   call SumDiag(C, sumC)
+   call SumDiag(D, sumD) 
 
    ! Вывод обработанных данных 
    open (file=output_file, newunit=Out, position='append')
