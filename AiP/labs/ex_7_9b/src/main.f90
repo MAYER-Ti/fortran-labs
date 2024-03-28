@@ -12,39 +12,23 @@ program exercise_7_9b
    implicit none
    character(*), parameter :: input_file = "../data/input.txt", output_file = "output.txt"
    integer                 :: In = 0, Out = 0, N = 0, i = 0
-   real(R_), allocatable   :: Z(:, :)
+   real(R_), allocatable   :: A(:, :)
    real(R_)                :: maxZ = 0
-
+   
+   !Ввод данных
    open (file=input_file, newunit=In)
       read (In, *) N
-      allocate (Z(N, N))
-      read (In, *) (Z(:, i), i = 1, N)
+      allocate (A(N, N))
+      read (In, *) (A(:, i), i = 1, N)
    close (In)
-
+   !Вывод данных 
    open (file=output_file, encoding=E_, newunit=Out)
-      write (Out, '('//N//'f6.2)') (Z(:, i), i = 1, N)
+      write (Out, '('//N//'f6.2)') (A(:, i), i = 1, N)
    close (Out)
-
-   maxZ = Norma(Z, N)
-
+   !Обработка данных
+   maxZ = MaxVal([(Sum(Abs(A(:, i)),1), i = 1, N)], 1)
+   !Вывод данных
    open (file=output_file, encoding=E_, newunit=Out, position='append')
       write (Out, '(a, T5, "= ", f9.2)') "Sum", maxZ
    close (Out)
-
-contains
-   Real(R_) pure function Norma(Z, N) result(maxZ)
-      real(R_), intent(in) :: Z(:, :)
-      integer, intent(in)  :: N 
-
-      Real(R_) Sums(N)
-      integer  i
-      
-      do concurrent (i = 1:N)
-        Sums(i) = Sum(Abs(Z(:,i))) 
-      end do
-
-      maxZ = MaxVal(Sums, 1)
-
-   end function Norma
-
 end program exercise_7_9b

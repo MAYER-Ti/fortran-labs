@@ -12,24 +12,17 @@ program exercise_7_6
    implicit none
    character(*), parameter       :: input_file = "../data/input.txt", output_file = "output.txt"
    integer                       :: Out = 0, N = 0, M, i = 0
-   real(R_), allocatable         :: A(:, :), Sums(:) 
+   real(R_), allocatable         :: A(:, :) 
    real(R_)                      :: res1 = 0, res2 = 0
    ! Ввод данных
    call ReadMatrix(input_file, A, N, M) 
    !Вывод данных 
    call WriteMatrix(output_file, A) 
       
-   !Выделение памяти
-   allocate(Sums(N)) 
-
-   res2 = Product(Norm2(A,2)) 
    !Обработка данных
+   res2 = Product(Norm2(A,2)) 
    A = A * A
-   !dir$ attributes align Sums: 32 :: Sums
-   do concurrent (i = 1:N)
-      Sums(i) = Sum(A(:,i), 1) 
-   end do
-   res1 = SqRt(Product(Sums))
+   res1 = SqRt(Product([(Sum(A(:,i), 1), i = 1, N)]))
    open (file=output_file, encoding=E_, newunit=Out, position='append')
       write(Out, *) "1) ", res1
       write(Out, *) "2) ", res2
