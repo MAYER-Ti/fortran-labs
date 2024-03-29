@@ -22,12 +22,42 @@ program ex_6_1g
    close (In)
    
    !sin_x = SinXImp(x)
-   Asin_x = Asin_(x)
+   Asin_x = Asin_Imp(x)
    open (file=output_file, encoding=E_, newunit=Out)
       write (Out, '(4(a, T16, "= ", e13.6/))') 'x', x, "Asin(x)", Asin_x, "Fortran Asin(x)", Asin(x), "Error", Asin_x - Asin(x)
    close (Out)
 
 contains
+   real(R_) pure function ASin_Imp(x) result(ASinX)
+      real(R_), intent(in) :: x
+      
+      ! 2pi == 2 * 4*Arctg(1), т. к. Tg(1) = pi/4 => pi == 4*Arctg(1)
+      real(R_)    r, q, x_s, x_2, OldASinX
+      integer     n
+
+      ! Делим x по модулю 2*pi, т. к. Sin(2*pi*n+a) = Sin(a).
+      x_s = x 
+      
+      ! Чтобы не вычислять каждый раз.
+      x_2   = x_s * x_s
+      
+      n     = 0
+      r     = x 
+      ASinX  = r
+
+      ! Цикл с постусловием: пока сумма не перестанет меняться.
+      do
+         n        = n + 1
+         q        = x_2 * ((n + 0.5)*(n + 0.5))/((n+1)*(n+1.5))
+         r        = r * q
+         OldASinX  = ASinx
+         ASinX     = ASinX + r
+         if (OldASinX == ASinx) exit
+      end do
+      !print "('Число членов суммы: ', i0)", n / 2 + 1
+      !print "('Число итераций: ', i0)", n / 2
+       
+   end function ASin_Imp
 
    real(R_) pure  function ASin_(x) result(AsinX)
    ! Чистая функция в регулярном стиле real(R_) pure function AsinX(x)

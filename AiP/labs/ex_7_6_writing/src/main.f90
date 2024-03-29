@@ -11,7 +11,7 @@ program exercise_7_6
    use MatrixIO
    implicit none
    character(*), parameter       :: input_file = "../data/input.txt", output_file = "output.txt"
-   integer                       :: Out = 0, N = 0, M, i = 0
+   integer                       :: Out = 0, N = 0, M
    real(R_), allocatable         :: A(:, :) 
    real(R_)                      :: res1 = 0, res2 = 0
    ! Ввод данных
@@ -22,7 +22,9 @@ program exercise_7_6
    !Обработка данных
    res2 = Product(Norm2(A,2)) 
    A = A * A
-   res1 = SqRt(Product([(Sum(A(:,i), 1), i = 1, N)]))
+   res1 = SqRt(Product(Sum(A,2),N))
+
+   !Вывод данных
    open (file=output_file, encoding=E_, newunit=Out, position='append')
       write(Out, *) "1) ", res1
       write(Out, *) "2) ", res2

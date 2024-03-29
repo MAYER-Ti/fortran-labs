@@ -1,5 +1,5 @@
 x              =  0.511000E+00
-Asin(x)        =      Infinity
+Asin(x)        =  0.582437E+00
 Fortran Asin(x)=  0.536348E+00
-Error          =      Infinity
+Error          =  0.460891E-01
 
