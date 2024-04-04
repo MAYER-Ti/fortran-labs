@@ -16,13 +16,17 @@ program ex_6_1g
    character(*), parameter :: input_file = "../data/input.txt", output_file = "output.txt"
    integer                 :: In = 0, Out = 0
    real(R_)                :: Asin_x = 0, x = 0
-
+   
+   !Ввод данных
    open (file=input_file, newunit=In)
       read (In, *) x
    close (In)
-   
+
+   !Обработка данных 
    !sin_x = SinXImp(x)
    Asin_x = Asin_Imp(x)
+
+   ! Вывод обработанных данных
    open (file=output_file, encoding=E_, newunit=Out)
       write (Out, '(4(a, T16, "= ", e13.6/))') 'x', x, "Asin(x)", Asin_x, "Fortran Asin(x)", Asin(x), "Error", Asin_x - Asin(x)
    close (Out)

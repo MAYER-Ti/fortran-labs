@@ -19,13 +19,14 @@ contains
 
    end subroutine ReadMatrix
  
-   subroutine WriteMatrix(output_file, Matrix)
-      character(*), intent(in) :: output_file
+   subroutine WriteMatrix(output_file, Matrix, pos, description)
+      character(*), intent(in) :: output_file, pos, description
       real(R_), intent(in)     :: Matrix(:,:)
       
       integer :: Out = 0, i = 0
 
-      open (file=output_file, newunit=Out, position='append')
+      open (file=output_file, newunit=Out, position=pos)
+         write (Out, *) description
          write (Out, '('//UBound(Matrix, 2)//'f6.2)') (Matrix(:, i), i = 1, UBound(Matrix, 1))
       close (Out)
    end subroutine WriteMatrix
