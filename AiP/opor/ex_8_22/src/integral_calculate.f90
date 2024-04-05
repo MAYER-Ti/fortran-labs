@@ -56,13 +56,13 @@ contains
    end function F
    
    ! Оформление как элементной функции.
-   pure elemental function F(p, x)
+   pure elemental function Fe(p, x)
       real(R_)    p, x
-      real(R_)    F
+      real(R_)    Fe
       intent(in)  p, x
       
       real(R_), parameter  :: q = 2.75_R_
 
-      F = SqRt(p + q * x**2) / (3 + p*x + q*x**2) ! ВЕКТОРИЗАЦИЯ.
-   end function F
+      Fe = SqRt(p + q * x**2) / (3 + p*x + q*x**2) ! ВЕКТОРИЗАЦИЯ.
+   end function Fe
 end module Integral_calculate 
