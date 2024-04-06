@@ -26,10 +26,11 @@ program ex_1_1
    ! Массивы фамилий и должностей 
    character(BLOCK_LEN, kind=CH_) :: surnames(EMPLOYEE_COUNT) = "", &
                                      positions(EMPLOYEE_COUNT) = ""
-   logical                        :: locPosition(EMPLOYEE_COUNT)
-
-   integer :: IO, i, In, Out
-   integer, allocatable :: ind(:)
+   logical                        :: locPosition(EMPLOYEE_COUNT) = .false., &
+                                     matched(EMPLOYEE_COUNT) = .false.
+   ! Матрица длинной количества сотрудников на 2, где хранится индекс должности и количество сотрудников этой должности
+   integer                        :: outPosAndCount(2, EMPLOYEE_COUNT) 
+   integer :: IO, i = 0, j = 0, In, Out, countPositions = 0
    ! Ввод данных
    open (file=input_file, encoding=E_, newunit=In)
       format = '(a, 1x, a)'
@@ -42,15 +43,35 @@ program ex_1_1
       write(Out, format, iostat=IO) (surnames(i), positions(i), i = 1, EMPLOYEE_COUNT)
       call Handle_IO_status(IO, "writing employee list")
    close (Out)
-   Ind  = [(i, i = 1, EMPLOYEE_COUNT)]
-
+   countPositions = 0 
    do i = 1,EMPLOYEE_COUNT
-            
-
-
+      ! Когда должность еще не обрабатывалась
+      if (.not. matched(i)) then
+          ! Посчитать новую должность
+          countPositions = countPositions + 1
+          ! Совпадает сама с собой 
+          locPosition(i) = .true.
+          ! Создание маски 
+          do concurrent(j = i+1:EMPLOYEE_COUNT)
+            locPosition(j) = positions(i) == positions(j) 
+          end do
+          ! Записать количество одинаковых должностей 
+          outPosAndCount(1, countPositions) = i ! Позиция с должностью 
+          outPosAndCount(2, countPositions) = Count(locPosition) ! Количество этой должности
+          ! Обновить массив совпадений для следующих итераций цикла
+          matched(i:EMPLOYEE_COUNT) = matched(i:EMPLOYEE_COUNT) .or. locPosition(i:EMPLOYEE_COUNT)
+      end if
    end do
 
-
+   
+      ! Вывод данных.
+   open (file=output_file, encoding=E_, position='append', newunit=Out)
+        ! write (Out, '('//EMPLOYEE_COUNT//'(a15, 1x, i3))', iostat=IO) (positions(outPosAndCount(1,i)), outPosAndCount(2,i),&
+        !     i = 1, EMPLOYEE_COUNT) 
+         write (Out, '('//countPositions-1//'(a, 1x, i3))', iostat=IO) (positions(outPosAndCount(1,i)), outPosAndCount(2,i),&
+             i = 1, EMPLOYEE_COUNT) 
+         call Handle_IO_status(IO, "write output")
+   close (Out)
 
 
 ! Составление логической маски, соответствующей юношам.
