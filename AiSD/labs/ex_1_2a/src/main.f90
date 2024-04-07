@@ -14,8 +14,9 @@
 ! очередного сотрудника сразу найти все такие должности и поместить в логическом массиве, где они встречаются
 ! Должность следующего сотрудника обрабатывать, только если она прежде не встречалась (смотреть логический массив).
 ! Использовать Count с маской, Any. См. упражнение 5.16, 7.25
-! Использовать массивы символов
-program ex_1_2
+! Использовать массивы символов.
+! первым индексом использовать позицию сотрудника 
+program ex_1_2b
    use Environment
    use IOEmployee
    use calcPositions
@@ -24,8 +25,8 @@ program ex_1_2
    implicit none
    character(*), parameter  :: input_file = "../data/class.txt" , output_file = "output.txt"
    ! Массивы фамилий и должностей 
-   character(kind=CH_)      :: surnames(BLOCK_LEN, EMPLOYEE_COUNT) = "", &
-                               positions(BLOCK_LEN, EMPLOYEE_COUNT) = ""
+   character(kind=CH_)      :: surnames(EMPLOYEE_COUNT, BLOCK_LEN) = "", &
+                               positions(EMPLOYEE_COUNT, BLOCK_LEN) = ""
    ! Матрица длинной количества сотрудников на 2, где хранится индекс должности и количество сотрудников этой должности
    integer                  :: outPosAndCount(2, EMPLOYEE_COUNT) 
    ! Количество должностей
@@ -40,4 +41,4 @@ program ex_1_2
 !   ! Вывод обработанных данных.
    call WriteCountPositions(output_file, positions, outPosAndCount, countPositions, 'append', 'Кол-во должностей')
 
-end program ex_1_2
+end program ex_1_2b
