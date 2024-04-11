@@ -12,7 +12,7 @@ program exercise_7_23
    
    implicit none
    character(*), parameter :: input_file = "../data/input.txt", output_file = "output.txt"
-   integer                 :: N = 0, M, i = 0
+   integer                 :: N = 0, M
    real(R_), allocatable   :: A(:,:), S(:,:)
 
    ! Ввод данных.
@@ -22,17 +22,12 @@ program exercise_7_23
    call WriteMatrix(output_file, A, 'rewind', 'Входная матрица') 
    ! Размещение данных
    allocate(S(N-1,N-1))
-   ! Сумма столбца со следующем
-   A = A(:,:) + A(::2,:)  
-  ! do concurrent(i = 1:N-1) 
-  !    A(i,:) = A(i,:) + A(i+1,:)
-  ! end do
-   !S = A(1:N-1,:) + A(1:N-1,::2)
-  ! do concurrent(i = 1:N-1)
-  !    S(:,i) = A(1:N-1,i) + A(1:N-1,i+1)
-  ! end do
    !Обработка данных 
+   ! Сумма столбца со следующем
+   A(1:N-1,:) = A(1:N-1,:) + A(2:N,:)
+   ! Сумма строки со следущей
+   S = A(1:N-1,1:N-1) + A(1:N-1,2:N)
     
-  call WriteMatrix(output_file, A, 'append', 'Матрица сумм')
+  call WriteMatrix(output_file, S, 'append', 'Матрица сумм')
 
 end program exercise_7_23
