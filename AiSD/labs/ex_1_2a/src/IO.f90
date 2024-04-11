@@ -33,17 +33,18 @@ contains
       close (Out)
     end subroutine WriteEmployee
 
-   subroutine WriteCountPositions(output_file, positions, posAndCount, countPositions, writeFilePostion, writeLetter)
+   subroutine WriteCountPositions(output_file, pos, counts, countPositions, writeFilePostion, writeLetter)
       character(*), intent(in)        :: output_file, writeFilePostion, writeLetter
-      character(kind=CH_), intent(in) :: positions(EMPLOYEE_COUNT, BLOCK_LEN)      
-      integer, intent(in)             :: posAndCount(2, EMPLOYEE_COUNT), countPositions
+      character(kind=CH_), allocatable, intent(in) :: pos(:, :)      
+      integer, allocatable                         :: counts(:)
+      integer                                      :: countPositions
 
       integer :: i = 0, Out = 0, IO = 0
 
       open (file=output_file, encoding=E_, position=writeFilePostion, newunit=Out)
             write (Out, '(a)') writeLetter
             write (Out, '('//countPositions//'('//BLOCK_LEN//'a1, 1x, i3,/))', iostat=IO) &
-                (positions(posAndCount(1,i), :), posAndCount(2,i), i = 1, countPositions) 
+                (pos(i,:), counts(i), i = 1, countPositions) 
             call Handle_IO_status(IO, "write employee positions")
       close (Out)     
 

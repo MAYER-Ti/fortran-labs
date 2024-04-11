@@ -27,18 +27,19 @@ program ex_1_2b
    ! Массивы фамилий и должностей 
    character(kind=CH_)      :: surnames(BLOCK_LEN, EMPLOYEE_COUNT) = "", &
                                positions(BLOCK_LEN, EMPLOYEE_COUNT) = ""
-   ! Матрица длинной количества сотрудников на 2, где хранится индекс должности и количество сотрудников этой должности
-   integer                  :: outPosAndCount(2, EMPLOYEE_COUNT) 
+   
+   ! Массивы где хранится  должности и количество сотрудников этой должности
+   character(kind=CH_), allocatable :: Poss(:,:)
+   integer, allocatable             :: Counts(:)
    ! Количество должностей
    integer :: countPositions = 0
-
    ! Ввод данных
    call ReadEmployee(input_file, surnames, positions) 
    ! Вывод исходных данных
    call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
    ! Обработка данных
-   call  CalcPos(positions, outPosAndCount, countPositions) 
-!   ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, positions, outPosAndCount, countPositions, 'append', 'Кол-во должностей')
+   call  CalcPos(positions, Poss, Counts, countPositions) 
+   ! Вывод обработанных данных.
+   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
 
 end program ex_1_2b

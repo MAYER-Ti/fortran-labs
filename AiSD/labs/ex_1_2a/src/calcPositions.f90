@@ -4,13 +4,14 @@ module calcPositions
    implicit none
 
 contains
-    pure subroutine CalcPos(positions, posAndCount, countPositions)
-        character(kind=CH_), intent(in) :: positions(EMPLOYEE_COUNT, BLOCK_LEN)
-        integer, intent(out)            :: posAndCount(2, EMPLOYEE_COUNT)
-        integer, intent(inout)          :: countPositions   
+    pure subroutine CalcPos(positions, outPos, outCount, countPositions)
+        character(kind=CH_), intent(in)  :: positions(EMPLOYEE_COUNT, BLOCK_LEN)
+        character(kind=CH_), allocatable, intent(out) :: outPos(:,:) 
+        integer, allocatable, intent(out) :: outCount(:)
+        integer, intent(inout)           :: countPositions   
         
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
-        integer :: i, j
+        integer :: i, j, posAndCount(2, EMPLOYEE_COUNT)
         countPositions = 0 
         matched = .false.
         locPosition = .false.
@@ -35,7 +36,12 @@ contains
                locPosition = .false.
            end if
         end do
+        ! Запись данных в массивы
+        allocate(outPos(countPositions, BLOCK_LEN), outCount(countPositions))
+        do i = 1, countPositions
+          outPos(i,:) = positions(posAndCount(1, i), :)
+          outCount(i) = posAndCount(2, i) 
+        end do
    end subroutine CalcPos 
-
 
 end module calcPositions 

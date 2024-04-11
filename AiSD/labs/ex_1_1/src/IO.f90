@@ -28,19 +28,20 @@ contains
          write(Out, '(a, 1x, a)', iostat=IO) (surnames(i), positions(i), i = 1, EMPLOYEE_COUNT)
          call Handle_IO_status(IO, "writing employee list")
       close (Out)
-    end subroutine WriteEmployee
+   end subroutine WriteEmployee
 
-   subroutine WriteCountPositions(output_file, positions, posAndCount, countPositions, writeFilePostion, writeLetter)
+   subroutine WriteCountPositions(output_file, pos, counts, countPositions, writeFilePostion, writeLetter)
       character(*), intent(in)                   :: output_file, writeFilePostion, writeLetter
-      character(BLOCK_LEN, kind=CH_), intent(in) :: positions(EMPLOYEE_COUNT)      
-      integer, intent(in)                        :: posAndCount(2, EMPLOYEE_COUNT), countPositions
+      character(BLOCK_LEN, kind=CH_), allocatable, intent(in) :: pos(:)
+      integer, allocatable, intent(in)           :: counts(:)     
+      integer, intent(in)                        :: countPositions
 
       integer :: i = 0, Out = 0, IO = 0
 
       open (file=output_file, encoding=E_, position=writeFilePostion, newunit=Out)
             write (Out, '(a)') writeLetter
             write (Out, '('//countPositions//'(a, 1x, i3,/))', iostat=IO) &
-                (positions(posAndCount(1,i)), posAndCount(2,i), i = 1, countPositions) 
+                (pos(i), counts(i), i = 1, countPositions) 
             call Handle_IO_status(IO, "write employee positions")
       close (Out)     
 

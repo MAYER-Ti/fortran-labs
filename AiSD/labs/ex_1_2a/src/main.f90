@@ -16,7 +16,7 @@
 ! Использовать Count с маской, Any. См. упражнение 5.16, 7.25
 ! Использовать массивы символов.
 ! первым индексом использовать позицию сотрудника 
-program ex_1_2b
+program ex_1_2a
    use Environment
    use IOEmployee
    use calcPositions
@@ -27,18 +27,18 @@ program ex_1_2b
    ! Массивы фамилий и должностей 
    character(kind=CH_)      :: surnames(EMPLOYEE_COUNT, BLOCK_LEN) = "", &
                                positions(EMPLOYEE_COUNT, BLOCK_LEN) = ""
-   ! Матрица длинной количества сотрудников на 2, где хранится индекс должности и количество сотрудников этой должности
-   integer                  :: outPosAndCount(2, EMPLOYEE_COUNT) 
+   ! Массивы где хранится  должности и количество сотрудников этой должности
+   character(kind=CH_), allocatable :: Poss(:,:)
+   integer, allocatable             :: Counts(:)
    ! Количество должностей
    integer :: countPositions = 0
-
    ! Ввод данных
    call ReadEmployee(input_file, surnames, positions) 
    ! Вывод исходных данных
    call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
    ! Обработка данных
-   call  CalcPos(positions, outPosAndCount, countPositions) 
+   call  CalcPos(positions, Poss, Counts, countPositions) 
 !   ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, positions, outPosAndCount, countPositions, 'append', 'Кол-во должностей')
+   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
 
-end program ex_1_2b
+end program ex_1_2a
