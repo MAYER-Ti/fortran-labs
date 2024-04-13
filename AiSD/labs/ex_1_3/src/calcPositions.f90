@@ -4,14 +4,15 @@ module calcPositions
    implicit none
 
 contains
-    pure subroutine CalcPos(positions, outPos, outCount, countPositions)
-        character(kind=CH_), intent(in)  :: positions(EMPLOYEE_COUNT, BLOCK_LEN)
-        character(kind=CH_), allocatable, intent(out) :: outPos(:,:) 
-        integer, allocatable, intent(out) :: outCount(:)
-        integer, intent(inout)           :: countPositions   
+    pure subroutine CalcPos(employees, outPos, outCount, countPositions)
+        type(employee), intent(in)                                 :: employees(EMPLOYEE_COUNT)
+        character(BLOCK_LEN, kind=CH_), allocatable, intent(out) :: outPos(:) 
+        integer, allocatable, intent(out)                          :: outCount(:)
+        integer, intent(inout)                                     :: countPositions   
         
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
         integer :: i, j, posAndCount(2, EMPLOYEE_COUNT)
+
         countPositions = 0 
         matched = .false.
         locPosition = .false.
@@ -24,10 +25,8 @@ contains
                locPosition(i) = .true.
                ! Создание маски 
                do concurrent (j = i+1:EMPLOYEE_COUNT)
-                  locPosition(j) = ALL(positions(:,j) == positions(:,i))
+                  locPosition(j) = employees(j)%pos == employees(i)%pos
                end do
-               !Трудности при замене на сечение!
-               !locPosition(i+1:EMPLOYEE_COUNT) = positions(:,i+1:EMPLOYEE_COUNT) == positions(:,i)
                ! Записать количество одинаковых должностей 
                posAndCount(1, countPositions) = i ! Позиция с должностью 
                posAndCount(2, countPositions) = Count(locPosition) ! Кол-во сотрудников с этой должностью
@@ -37,9 +36,9 @@ contains
            end if
         end do
         ! Запись данных в массивы
-        allocate(outPos(BLOCK_LEN, countPositions), outCount(countPositions))
+        allocate(outPos(countPositions), outCount(countPositions))
         do i = 1, countPositions
-          outPos(:,i) = positions(:, posAndCount(1, i))
+          outPos(i) = employees(posAndCount(1, i))%pos
           outCount(i) = posAndCount(2, i) 
         end do
    end subroutine CalcPos 

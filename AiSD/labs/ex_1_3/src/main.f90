@@ -27,10 +27,10 @@ program ex_1_3
    ! Массивы фамилий и должностей 
    type(employee) :: employees(EMPLOYEE_COUNT) 
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   !character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
-   !integer, allocatable                        :: Counts(:)
+   character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
+   integer, allocatable                        :: Counts(:)
    ! Количество должностей
-   !integer :: countPositions = 0
+   integer :: countPositions = 0
    ! Создание файла данных
    call CreateDataFile(input_file, data_file)
    ! Ввод данных
@@ -38,8 +38,8 @@ program ex_1_3
    ! Вывод исходных данных
    call WriteEmployee(output_file, employees, 'rewind', 'Входные данные')
    ! Обработка данных
-   !call  CalcPos(employees, Poss, Counts, countPositions) 
+   call  CalcPos(employees, Poss, Counts, countPositions) 
    ! Вывод обработанных данных.
-   !call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
+   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
 
 end program ex_1_3

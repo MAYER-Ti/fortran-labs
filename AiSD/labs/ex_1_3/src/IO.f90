@@ -40,12 +40,14 @@ contains
       character(*)     :: data_file 
       type(employee)   :: employees(EMPLOYEE_COUNT)
       
-      integer :: In, IO, sizeOfOneEmployee 
+      integer :: i, In, IO, sizeOfOneEmployee 
       
       sizeOfOneEmployee = (BLOCK_LEN*2+1)*CH_ 
       open (file=data_file, form='unformatted', newunit=In, access='direct', recl=sizeOfOneEmployee)
-         read (In, iostat=IO, rec=1) employees 
+      do i = 1, EMPLOYEE_COUNT
+         read (In, iostat=IO, rec=i) employees(i) 
          call Handle_IO_status(IO, "Чтение из бинарного файла некорректно")
+      end do
       close (In)
    end function ReadEmployees 
    
@@ -57,7 +59,7 @@ contains
       character(:), allocatable  :: format
 
       open (file=output_file, encoding=E_,position=writeFilePostion, newunit=Out)
-         format = '('//BLOCK_LEN//'a1, 1x, '//BLOCK_LEN//'a1)'
+         format = '(a, 1x, a1)'
          write(Out, '(/,a)') writeLetter
          write(Out, format, iostat=IO) employees 
          call Handle_IO_status(IO, "Некорректный вывод сотрудников")
@@ -65,17 +67,18 @@ contains
     end subroutine WriteEmployee
 
    subroutine WriteCountPositions(output_file, pos, counts, countPositions, writeFilePostion, writeLetter)
-      character(*), intent(in)        :: output_file, writeFilePostion, writeLetter
-      character(kind=CH_), allocatable, intent(in) :: pos(:, :)      
-      integer, allocatable                         :: counts(:)
-      integer                                      :: countPositions
+      character(*), intent(in)                               :: output_file, writeFilePostion, writeLetter
+      character(BLOCK_LEN,kind=CH_), allocatable, intent(in) :: pos(:)      
+      integer, allocatable                                   :: counts(:)
+      integer                                                :: countPositions
 
-      integer :: i = 0, Out = 0, IO = 0
+      integer                   :: i = 0, Out = 0, IO = 0
+      character(:), allocatable :: format
 
       open (file=output_file, encoding=E_, position=writeFilePostion, newunit=Out)
             write (Out, '(a)') writeLetter
-            write (Out, '('//countPositions//'('//BLOCK_LEN//'a1, 1x, i3,/))', iostat=IO) &
-                (pos(:,i), counts(i), i = 1, countPositions) 
+            format = '('//countPositions//'(a, 1x, i3,/))'
+            write (Out, format, iostat=IO) (pos(i), counts(i), i = 1, countPositions) 
             call Handle_IO_status(IO, "write employee positions")
       close (Out)     
 
