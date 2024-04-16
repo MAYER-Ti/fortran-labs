@@ -12,8 +12,9 @@
 ! Петров Д. Т. 1992
 ! 
 ! Использовать массив символов 
+! Первым индексом хранить номер студента 
 
-program ex_1_2
+program ex_1_2a
    use Environment
    use SearchesGroup 
    use IOGroup
@@ -22,13 +23,13 @@ program ex_1_2
    !integer, parameter       :: BLOCK_LEN = 15, EMPLOYEE_COUNT  = 5
    character(*), parameter  :: input_file = "../data/class.txt" , output_file = "output.txt"
    ! Массивы фамилий, инициалов и года рождения 
-   character(kind=CH_)   :: Surnames(SURNAME_LEN, GROUP_COUNT) = ""
-   character(kind=CH_) :: Initials(INITIALS_LEN, GROUP_COUNT) = ""
-   integer               :: Dates(GROUP_COUNT) = 0
+   character(kind=CH_) :: Surnames(GROUP_COUNT, SURNAME_LEN) = ""
+   character(kind=CH_) :: Initials(GROUP_COUNT, INITIALS_LEN) = ""
+   integer             :: Dates(GROUP_COUNT) = 0
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   character(kind=CH_) :: SearchSurname(SURNAME_LEN, 2) = "" 
-   character(kind=CH_)   :: SearchInitials(INITIALS_LEN, 2) = ""
-   integer               :: SearchDate(2) = 0
+   character(kind=CH_) :: SearchSurname(2, SURNAME_LEN) = "" 
+   character(kind=CH_) :: SearchInitials(2, INITIALS_LEN) = ""
+   integer             :: SearchDate(2) = 0
 
    ! Ввод данных
    call ReadGroup(input_file, Surnames, Initials, Dates) 
@@ -36,13 +37,13 @@ program ex_1_2
    call WriteGroup(output_file, Surnames, Initials, Dates, 'rewind', 'Входные данные')
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   call SearchFirstForAlph(Surnames, Initials, Dates, SearchSurname(:,1), SearchInitials(:,1), SearchDate(1)) 
+   call SearchFirstForAlph(Surnames, Initials, Dates, SearchSurname(1,:), SearchInitials(1,:), SearchDate(1)) 
    ! Найти самого молодого
-   call SearchYoungest(Surnames, Initials, Dates, SearchSurname(:,2), SearchInitials(:,2), SearchDate(2))
+   call SearchYoungest(Surnames, Initials, Dates, SearchSurname(2,:), SearchInitials(2,:), SearchDate(2))
    ! Вывод обработанных данных.
-   call WriteElement(output_file, SearchSurname(:,1), SearchInitials(:,1), SearchDate(1),&
+   call WriteElement(output_file, SearchSurname(1,:), SearchInitials(1,:), SearchDate(1),&
        'append', 'Первый по алфавиту:')
-   call WriteElement(output_file, SearchSurname(:,2), SearchInitials(:,2), SearchDate(2),&
+   call WriteElement(output_file, SearchSurname(2,:), SearchInitials(2,:), SearchDate(2),&
        'append', 'Самый молодой:')
 
-end program ex_1_2
+end program ex_1_2a
