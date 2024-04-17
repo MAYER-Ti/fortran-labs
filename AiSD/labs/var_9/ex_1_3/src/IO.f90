@@ -18,13 +18,13 @@ contains
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-      sizeOfOneStud = (SURNAME_LEN + 1 + INITIALS_LEN)*CH_  + I_
+      sizeOfOneStud = (SURNAME_LEN+INITIALS_LEN+2)*CH_ + I_
       open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneStud)
-         format = '(a, 1x, a, 1x, i)'
+         format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
          do i = 1, GROUP_COUNT
             ! Чтение входного файла
             read (In, format, iostat=IO) stud
-            call Handle_IO_status(IO, "Ошибка чтения из входного файла")
+            call Handle_IO_status(IO, "Ошибка чтения из входного файла-"//i)
             ! Запись в бинарный файл
             write (Out, iostat=IO, rec=i) stud
             call Handle_IO_status(IO, "Ошибка записи в бинарный файл!")
@@ -39,7 +39,7 @@ contains
       
       integer :: i, In, IO, sizeOfOneStud
       
-      sizeOfOneStud = (SURNAME_LEN + 1 + INITIALS_LEN)*CH_  + I_
+      sizeOfOneStud = (SURNAME_LEN  + INITIALS_LEN+2)*CH_  + I_
       open (file=data_file, form='unformatted', newunit=In, access='direct', recl=sizeOfOneStud)
       do i = 1, GROUP_COUNT
          read (In, iostat=IO, rec=i) group(i) 
