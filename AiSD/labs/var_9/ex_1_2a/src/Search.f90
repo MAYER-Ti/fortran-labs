@@ -14,7 +14,7 @@ contains
       integer, intent(out)             :: outDate
  
       integer :: searchIndex  
-      searchIndex = FindLoc(Surnames(1,:), MinVal(Surnames(1,:), 1), 1) 
+      searchIndex = FindLoc(Surnames(:,1), MinVal(Surnames(:,1), 1), 1) 
       ! При MinLoc(Surnames(1:),1) происходит неправильный поиск 
 
       outSurname = Surnames(searchIndex, :)  
