@@ -31,7 +31,7 @@ program ex_1_5
    character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
    integer, allocatable                        :: Counts(:)
    ! Количество должностей
-   integer :: countPositions = 0
+   integer :: sizePosCounts = 0
    ! Создание файла данных
    call CreateDataFile(input_file, data_file)
    ! Ввод данных
@@ -39,8 +39,8 @@ program ex_1_5
    ! Вывод исходных данных
    call WriteEmployee(output_file, empls, 'rewind', 'Входные данные')
    ! Обработка данных
-   call CalcPos(empls, Poss, Counts, countPositions) 
+   call SearchPositions(empls%pos, Poss, Counts, sizePosCounts) 
    ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
+   call WriteCountPositions(output_file, Poss, Counts, sizePosCounts, 'append', 'Кол-во должностей')
 
 end program ex_1_5
