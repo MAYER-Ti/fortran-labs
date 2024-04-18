@@ -5,41 +5,40 @@ module SearchesGroup
    implicit none
 
 contains
-    subroutine SearchFirstForAlph(Surnames, Initials, Dates, outSurname, outInitial, outDate)
-      character(kind=CH_), intent(in)  :: Surnames(GROUP_COUNT, SURNAME_LEN)
-      character(kind=CH_), intent(in)  :: Initials(GROUP_COUNT, INITIALS_LEN)
-      integer, intent(in)              :: Dates(GROUP_COUNT)
-      character(kind=CH_), intent(out) :: outSurname(SURNAME_LEN) 
-      character(kind=CH_), intent(out) :: outInitial(INITIALS_LEN) 
-      integer, intent(out)             :: outDate
+    pure function SearchFirstForAlph(Surnames) result(searchIndex)
+      character(kind=CH_), intent(in) :: Surnames(GROUP_COUNT, SURNAME_LEN)
  
-      integer :: searchIndex  
-      searchIndex = FindLoc(Surnames(:,1), MinVal(Surnames(:,1), 1), 1) 
+      integer :: searchIndex, i, j 
+      ! i - Номер студента, j - номер символа в фамилии
+
+      ! searchIndex = FindLoc(Surnames(:,1), MinVal(Surnames(:,1), 1), 1) 
       ! При MinLoc(Surnames(1:),1) происходит неправильный поиск 
 
-      outSurname = Surnames(searchIndex, :)  
-      outInitial = Initials(searchIndex, :)
-      outDate    = Dates(searchIndex)
- 
-   end subroutine SearchFirstForAlph 
+      searchIndex = 1
+      do i = 2, GROUP_COUNT
+         do j = 1, SURNAME_LEN
+            ! Если символ одинаковый, то сравнивать следующий
+            if (Surnames(searchIndex,j) == Surnames(i,j)) then
+                cycle
+            end if 
+            ! Если символ меньше, то запомнить индекс 
+            if (Surnames(searchIndex,j) > Surnames(i,j)) then
+               searchIndex = i 
+            end if 
+            ! Если символы не равны, то в любом случае переходим к след. студенту
+            exit
+         end do
+      end do
 
-   pure subroutine SearchYoungest(Surnames, Initials, Dates, outSurname, OutInitial, OutDate)
-      character(kind=CH_), intent(in)  :: Surnames(GROUP_COUNT, SURNAME_LEN)
-      character(kind=CH_), intent(in)  :: Initials(GROUP_COUNT, INITIALS_LEN)
-      integer, intent(in)              :: Dates(GROUP_COUNT)
-      character(kind=CH_), intent(out) :: outSurname(SURNAME_LEN)
-      character(kind=CH_), intent(out) :: outInitial(INITIALS_LEN)
-      integer, intent(out)             :: outDate
+   end function SearchFirstForAlph 
+
+   pure function SearchYoungest(Dates) result(searchIndex)
+      integer, intent(in) :: Dates(GROUP_COUNT)
  
       integer :: searchIndex  
 
       searchIndex = MaxLoc(Dates, 1)
-      ! При MinLoc(Surnames,1) происходит неправильный поиск 
-      
-      outSurname = Surnames(searchIndex, :)  
-      outInitial = Initials(searchIndex, :)
-      outDate    = Dates(searchIndex)
  
-   end subroutine SearchYoungest
+   end function SearchYoungest
 
 end module SearchesGroup 

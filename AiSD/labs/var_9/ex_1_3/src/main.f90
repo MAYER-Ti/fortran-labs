@@ -26,10 +26,7 @@ program ex_1_3
 
    ! Массивы фамилий, инициалов и года рождения 
    type(student) :: Group(GROUP_COUNT)
-   ! Массивы где хранится  должности и количество сотрудников этой должности
-   type(student) :: firstAlphStud
-   type(student) :: youngestStud
-   
+   integer       :: indexFirstForAlph = 0, indexYoungest = 0 
    ! Создание файла должностей
    call CreateDataFile(input_file, data_file)
    ! Ввод данных
@@ -38,11 +35,11 @@ program ex_1_3
    call WriteGroup(output_file, Group, 'rewind', 'Входные данные')
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   firstAlphStud = SearchFirstForAlph(Group) 
+   indexFirstForAlph = SearchFirstForAlph(Group) 
    ! Найти самого молодого
-   youngestStud = SearchYoungest(Group)
+   indexYoungest = SearchYoungest(Group)
    ! Вывод обработанных данных.
-   call WriteElement(output_file, firstAlphStud, 'append', 'Первый по алфавиту:')
-   call WriteElement(output_file, youngestStud, 'append', 'Самый молодой:')
+   call WriteElement(output_file, Group(indexFirstForAlph), 'append', 'Первый по алфавиту:')
+   call WriteElement(output_file, Group(indexYoungest), 'append', 'Самый молодой:')
 
 end program ex_1_3

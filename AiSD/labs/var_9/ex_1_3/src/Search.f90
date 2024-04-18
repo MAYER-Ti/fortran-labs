@@ -5,30 +5,28 @@ module SearchesGroup
    implicit none
 
 contains
-   pure function SearchFirstForAlph(Group) result(stud)
+   pure function SearchFirstForAlph(Group) result(searchIndex)
       type(student), intent(in) :: Group(GROUP_COUNT)
 
-      type(student) :: stud 
-      integer :: searchIndex  
+      integer :: searchIndex, i  
 
-      searchIndex = FindLoc(Group(:)%sur, MinVal(Group(:)%sur, 1), 1)
-      ! При MinLoc(Surnames,1) происходит неправильный поиск 
+      searchIndex = 1
+      do i = 2, GROUP_COUNT
+         if(Group(searchIndex)%sur > Group(i)%sur) then
+            searchIndex = i
+         end if 
+      end do
       
-      stud = Group(searchIndex) 
    end function SearchFirstForAlph 
 
-   pure function SearchYoungest(Group) result(stud)
+   pure function SearchYoungest(Group) result(searchIndex)
       type(student), intent(in) :: Group(GROUP_COUNT)
 
-      type(student) :: stud
- 
       integer :: searchIndex  
 
       searchIndex = MaxLoc(Group(:)%date, 1)
       ! При MinLoc(Surnames,1) происходит неправильный поиск 
       
-      stud = Group(searchIndex) 
- 
    end function SearchYoungest
 
 end module SearchesGroup 

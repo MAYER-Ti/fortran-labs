@@ -26,23 +26,20 @@ program ex_1_1
    character(INITIALS_LEN, kind=CH_) :: Initials(GROUP_COUNT) = ""
    integer                           :: Dates(GROUP_COUNT) = 0
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   character(SURNAME_LEN, kind=CH_)  :: SearchSurname(2) = "" 
-   character(INITIALS_LEN, kind=CH_) :: SearchInitials(2) = ""
-   integer                           :: SearchDate(2) = 0
-
+   integer                           :: indexFirstForAlph = 0, indexYoungest = 0
    ! Ввод данных
    call ReadGroup(input_file, Surnames, Initials, Dates) 
    ! Вывод исходных данных
    call WriteGroup(output_file, Surnames, Initials, Dates, 'rewind', 'Входные данные')
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   call SearchFirstForAlph(Surnames, Initials, Dates, SearchSurname(1), SearchInitials(1), SearchDate(1)) 
+   indexFirstForAlph = SearchFirstForAlph(Surnames) 
    ! Найти самого молодого
-   call SearchYoungest(Surnames, Initials, Dates, SearchSurname(2), SearchInitials(2), SearchDate(2))
+   indexYoungest = SearchYoungest(Dates)
    ! Вывод обработанных данных.
-   call WriteElement(output_file, SearchSurname(1), SearchInitials(1), SearchDate(1),&
+   call WriteElement(output_file, Surnames(indexFirstForAlph), Initials(indexFirstForAlph), Dates(indexFirstForAlph),&
        'append', 'Первый по алфавиту:')
-   call WriteElement(output_file, SearchSurname(2), SearchInitials(2), SearchDate(2),&
+   call WriteElement(output_file, Surnames(indexYoungest), Initials(indexYoungest), Dates(indexYoungest),&
        'append', 'Самый молодой:')
 
 end program ex_1_1
