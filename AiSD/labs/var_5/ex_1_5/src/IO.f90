@@ -10,7 +10,12 @@ module IOEmployee
        character(BLOCK_LEN, kind=CH_) :: sur(EMPLOYEE_COUNT)
        character(BLOCK_LEN, kind=CH_) :: pos(EMPLOYEE_COUNT)
    end type employees
-
+   
+   type ResPosAndCount
+       character(BLOCK_LEN, kind=CH_),allocatable :: pos(:)
+       integer, allocatable                       :: counts(:)
+       integer                                    :: sizePos
+   end type ResPosAndCount
 
 contains
    subroutine CreateDataFile(input_file, data_file)
@@ -66,19 +71,17 @@ contains
       close (Out)
     end subroutine WriteEmployee
 
-   subroutine WriteCountPositions(output_file, pos, counts, countPositions, writeFilePostion, writeLetter)
-      character(*), intent(in)                               :: output_file, writeFilePostion, writeLetter
-      character(BLOCK_LEN,kind=CH_), allocatable, intent(in) :: pos(:)      
-      integer, allocatable                                   :: counts(:)
-      integer                                                :: countPositions
+   subroutine WriteCountPositions(output_file, Res, writeFilePostion, writeLetter)
+      character(*), intent(in)         :: output_file, writeFilePostion, writeLetter
+      type(ResPosAndCount), intent(in) :: Res
 
       integer                   :: i = 0, Out = 0, IO = 0
       character(:), allocatable :: format
 
       open (file=output_file, encoding=E_, position=writeFilePostion, newunit=Out)
             write (Out, '(a)') writeLetter
-            format = '('//countPositions//'(a, 1x, i3,/))'
-            write (Out, format, iostat=IO) (pos(i), counts(i), i = 1, countPositions) 
+            format = '('//Res%sizePos//'(a, 1x, i3,/))'
+            write (Out, format, iostat=IO) (Res%pos(i), Res%counts(i), i = 1, Res%sizePos) 
             call Handle_IO_status(IO, "write employee positions")
       close (Out)     
 

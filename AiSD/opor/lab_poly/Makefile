@@ -1,4 +1,4 @@
-FC=gfortran-9
+FC=gfortran
 FFLAGS=-Wall -g -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto
 FOPT=
 #FOPT=-O3 -ftree-vectorize -fopt-info-vec

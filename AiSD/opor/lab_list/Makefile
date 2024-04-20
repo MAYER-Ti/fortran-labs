@@ -1,4 +1,4 @@
-FC=gfortran-9
+FC=gfortran
 FFLAGS=-Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 FOPT=
 #FOPT=-O3 -ftree-vectorize -fopt-info-vec

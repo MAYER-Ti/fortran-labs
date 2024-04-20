@@ -14,33 +14,33 @@
 ! очередного сотрудника сразу найти все такие должности и поместить в логическом массиве, где они встречаются
 ! Должность следующего сотрудника обрабатывать, только если она прежде не встречалась (смотреть логический массив).
 ! Использовать Count с маской, Any. См. упражнение 5.16, 7.25
-! Использовать или массив структур или структуру массивов
+! Использовать динамические однонаправленные списки 
 ! Использовать хвостовую рекурсию
-program ex_1_5
+program ex_1_6
    use Environment
    use IOEmployee
-   use calcPositions
+   use Process
 
    implicit none
    character(*), parameter  :: input_file = "../data/class.txt", &
                                output_file = "output.txt", &
                                data_file   = "employee.dat"
    ! Массивы фамилий и должностей 
-   type(employees) :: empls 
+   type(nodeEmpl), pointer :: List 
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
-   integer, allocatable                        :: Counts(:)
+   type(nodePosCount), pointer :: Res
+  ! character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
+  ! integer, allocatable                        :: Counts(:)
    ! Количество должностей
-   integer :: sizePosCounts = 0
+  ! integer :: sizePosCounts = 0
    ! Создание файла данных
-   call CreateDataFile(input_file, data_file)
    ! Ввод данных
-   empls = ReadEmployees(data_file) 
+   List => ReadList(input_file) 
    ! Вывод исходных данных
-   call WriteEmployee(output_file, empls, 'rewind', 'Входные данные')
+   call WriteList(output_file, List, 'rewind', 'Входные данные')
    ! Обработка данных
-   call SearchPositions(empls%pos, Poss, Counts, sizePosCounts) 
+   call SearchPositions(List, Res) 
    ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, Poss, Counts, sizePosCounts, 'append', 'Кол-во должностей')
+   call WriteList(output_file, Res, 'append', 'Кол-во должностей')
 
-end program ex_1_5
+end program ex_1_6
