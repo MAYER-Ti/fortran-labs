@@ -14,9 +14,9 @@
 ! очередного сотрудника сразу найти все такие должности и поместить в логическом массиве, где они встречаются
 ! Должность следующего сотрудника обрабатывать, только если она прежде не встречалась (смотреть логический массив).
 ! Использовать Count с маской, Any. См. упражнение 5.16, 7.25
-! Использовать динамические однонаправленные списки 
+! Использовать recursive allocatable списки 
 ! Использовать хвостовую рекурсию
-program ex_1_6a
+program ex_1_6b
    use Environment
    use IOEmployee
    use Process
@@ -26,11 +26,11 @@ program ex_1_6a
                                output_file = "output.txt", &
                                data_file   = "employee.dat"
    ! Массивы фамилий и должностей 
-   type(nodeEmpl), pointer :: List 
+   type(nodeEmpl), allocatable :: List 
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   type(nodePosCount), pointer :: Res
+   type(nodePosCount), allocatable :: Res
    ! Ввод данных
-   List => ReadList(input_file) 
+   List = ReadList(input_file) 
    ! Вывод исходных данных
    call WriteList(output_file, List, 'rewind', 'Входные данные')
    ! Обработка данных
@@ -38,4 +38,4 @@ program ex_1_6a
    ! Вывод обработанных данных.
    call WriteList(output_file, Res, 'append', 'Кол-во должностей')
 
-end program ex_1_6a
+end program ex_1_6b

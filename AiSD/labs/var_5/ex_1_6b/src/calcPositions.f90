@@ -4,20 +4,19 @@ module Process
    implicit none
 
 contains
-
     pure subroutine SearchPositions(List, ListPosAndCount)
-        type(nodeEmpl), pointer, intent(inout) :: List 
-        type(nodePosCount), pointer, intent(inout) :: ListPosAndCount
+        type(nodeEmpl), allocatable, intent(inout) :: List 
+        type(nodePosCount), allocatable, intent(inout) :: ListPosAndCount
         ! Подсчет должностей
         call RecCalcPos(List, ListPosAndCount)     
 
     end subroutine SearchPositions   
 
     pure recursive subroutine RecCalcPos(elemEmpl, ListPosAndCount) 
-       type(nodeEmpl), pointer, intent(inout)     :: elemEmpl
-       type(nodePosCount), pointer, intent(inout) :: ListPosAndCount
+       type(nodeEmpl), allocatable, intent(inout)     :: elemEmpl
+       type(nodePosCount), allocatable, intent(inout) :: ListPosAndCount
 
-       if (Associated(elemEmpl)) then
+       if (Allocated(elemEmpl)) then
           ! Если такой дожности нету, то добавить, если есть, то увеличить кол-во 
           call AddOrPlusPos(elemEmpl, ListPosAndCount)
           ! Следующий узел
@@ -26,10 +25,10 @@ contains
     end subroutine RecCalcPos
 
     pure recursive subroutine AddOrPlusPos(elemEmpl, elemPosAndCount)
-       type(nodeEmpl), pointer, intent(inout)     :: elemEmpl
-       type(nodePosCount), pointer, intent(inout) :: elemPosAndCount
+       type(nodeEmpl), allocatable, intent(inout)     :: elemEmpl
+       type(nodePosCount), allocatable, intent(inout) :: elemPosAndCount
 
-       if(Associated(elemPosAndCount)) then
+       if(Allocated(elemPosAndCount)) then
           ! Если такая должность уже встречалась
           if(elemEmpl%pos == elemPosAndCount%pos) then
               elemPosAndCount%counts = elemPosAndCount%counts + 1
