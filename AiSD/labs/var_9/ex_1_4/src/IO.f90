@@ -14,21 +14,20 @@ contains
       character(*), intent(in) :: input_file, data_file
 
       type(student) :: stud 
-      integer       :: In, Out, IO, i, sizeOfOneStud
+      integer       :: In, Out, IO, i
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-      sizeOfOneStud = (SURNAME_LEN+INITIALS_LEN+2)*CH_ + I_
-      open (file=data_file, form='unformatted', newunit=Out, access='stream', recl=sizeOfOneStud)
-         format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
+      open (file=data_file, form='unformatted', newunit=Out, access='stream')
+         format = '(:a, 1x, a, 1x, i'//DATE_LEN//')'
          do i = 1, GROUP_COUNT
             ! Чтение входного файла
             read (In, format, iostat=IO) stud%sur(i), stud%init(i), stud%date(i)
             call Handle_IO_status(IO, "Ошибка чтения из входного файла-"//i)
-            ! Запись в бинарный файл
-            write (Out, iostat=IO, rec=i) stud%sur(i), stud%init(i), stud%date(i)
-            call Handle_IO_status(IO, "Ошибка записи в бинарный файл!")
          end do
+         ! Запись в бинарный файл
+         write (Out, iostat=IO) stud%sur, stud%init, stud%date
+         call Handle_IO_status(IO, "Ошибка записи в бинарный файл!")
       close (Out)
       close (In)
    end subroutine CreateDataFile
@@ -37,14 +36,11 @@ contains
       character(*),intent(in) :: data_file
       type(student)           :: Group
       
-      integer :: i, In, IO, sizeOfOneStud
+      integer :: In, IO
       
-      sizeOfOneStud = (SURNAME_LEN + INITIALS_LEN+2)*CH_ + I_
-      open (file=data_file, form='unformatted', newunit=In, access='direct', recl=sizeOfOneStud)
-      do i = 1, GROUP_COUNT
-         read (In, iostat=IO, rec=i) Group%sur(i), Group%init(i), Group%date(i) 
-         call Handle_IO_status(IO, "Ошибка чтения данных")
-      end do
+      open (file=data_file, form='unformatted', newunit=In, access='stream')
+      read (In, iostat=IO) Group%sur, Group%init, Group%date
+      call Handle_IO_status(IO, "Ошибка чтения данных")
       close (In)
    end function ReadGroup 
    
@@ -58,7 +54,7 @@ contains
       open (file=output_file, encoding=E_,position=writeFilePostion, newunit=Out)
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
          write(Out, '(a)') writeLetter
-         write(Out, format, iostat=IO) (Group%sur(i), Group%init(i), Group%date(i), i = 1, GROUP_COUNT) 
+         write(Out, format, iostat=IO) (Group%sur(i), Group%init(i), Group%date(i), i = 1, GROUP_COUNT)
          call Handle_IO_status(IO, "Ошибка вывода данных")
       close (Out)
    end subroutine WriteGroup
