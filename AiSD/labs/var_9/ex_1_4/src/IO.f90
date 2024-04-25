@@ -19,7 +19,7 @@ contains
 
       open (file=input_file, encoding=E_, newunit=In)
       sizeOfOneStud = (SURNAME_LEN+INITIALS_LEN+2)*CH_ + I_
-      open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneStud)
+      open (file=data_file, form='unformatted', newunit=Out, access='stream', recl=sizeOfOneStud)
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
          do i = 1, GROUP_COUNT
             ! Чтение входного файла
