@@ -19,14 +19,4 @@ contains
       
    end function SearchFirstForAlph 
 
-   pure function SearchYoungest(dates) result(searchIndex)
-      integer, intent(in) :: dates(GROUP_COUNT)
-
-      integer :: searchIndex  
-
-      searchIndex = MaxLoc(dates, 1)
-      ! При MinLoc(Surnames,1) происходит неправильный поиск 
-      
-   end function SearchYoungest
-
 end module SearchesGroup 

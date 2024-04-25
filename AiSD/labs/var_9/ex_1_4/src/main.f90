@@ -35,7 +35,7 @@ program ex_1_4
    ! Найти первого работника по алфавиту
    indexFirstForAlph = SearchFirstForAlph(Group%sur) 
    ! Найти самого молодого
-   indexYoungest = SearchYoungest(Group%date)
+   indexYoungest = MaxLoc(Group%date, 1)
    ! Вывод обработанных данных.
    call WriteElement(output_file, Group%sur(indexFirstForAlph), Group%init(indexFirstForAlph), Group%date(indexFirstForAlph), &
          'append', 'Первый по алфавиту:')
