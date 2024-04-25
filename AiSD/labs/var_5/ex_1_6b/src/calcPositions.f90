@@ -4,13 +4,6 @@ module Process
    implicit none
 
 contains
-    pure subroutine SearchPositions(List, ListPosAndCount)
-        type(nodeEmpl), allocatable, intent(inout) :: List 
-        type(nodePosCount), allocatable, intent(inout) :: ListPosAndCount
-        ! Подсчет должностей
-        call RecCalcPos(List, ListPosAndCount)     
-
-    end subroutine SearchPositions   
 
     pure recursive subroutine RecCalcPos(elemEmpl, ListPosAndCount) 
        type(nodeEmpl), allocatable, intent(inout)     :: elemEmpl

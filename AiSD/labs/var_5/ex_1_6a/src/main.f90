@@ -34,7 +34,7 @@ program ex_1_6a
    ! Вывод исходных данных
    call WriteList(output_file, List, 'rewind', 'Входные данные')
    ! Обработка данных
-   call SearchPositions(List, Res) 
+   call RecCalcPos(List, Res) 
    ! Вывод обработанных данных.
    call WriteList(output_file, Res, 'append', 'Кол-во должностей')
 

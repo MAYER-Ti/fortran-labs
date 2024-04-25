@@ -1,5 +1,5 @@
 ! Copyright 2015 Fyodorov S. A.
-
+! Допуск
 program reference_lab_1_5
    use Environment
    use Group_Process

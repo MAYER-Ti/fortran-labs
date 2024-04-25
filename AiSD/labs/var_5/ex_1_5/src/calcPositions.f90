@@ -32,9 +32,6 @@ contains
        integer, intent(inout) :: OutCountAndPos(2, EMPLOYEE_COUNT), sizeCountAndPos
        logical, intent(inout) :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
        
-       if(i > EMPLOYEE_COUNT) then 
-          return
-       end if 
        if (.not. matched(i)) then
           ! Посчитать новую должность
           sizeCountAndPos = sizeCountAndPos + 1
@@ -49,7 +46,9 @@ contains
           matched(i:) = matched(i:) .or. locPosition(i:)
           locPosition = .false.
        end if 
-       call RecCalcPos(positions, OutCountAndPos, sizeCountAndPos, matched, locPosition, i + 1)
+       if(i < EMPLOYEE_COUNT) then
+          call RecCalcPos(positions, OutCountAndPos, sizeCountAndPos, matched, locPosition, i + 1)
+       end if
     end subroutine RecCalcPos
 
     pure subroutine CalcPos(empls, outPos, outCount, countPositions)

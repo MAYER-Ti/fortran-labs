@@ -5,14 +5,6 @@ module Process
 
 contains
 
-    pure subroutine SearchPositions(List, ListPosAndCount)
-        type(nodeEmpl), pointer, intent(inout) :: List 
-        type(nodePosCount), pointer, intent(inout) :: ListPosAndCount
-        ! Подсчет должностей
-        call RecCalcPos(List, ListPosAndCount)     
-
-    end subroutine SearchPositions   
-
     pure recursive subroutine RecCalcPos(elemEmpl, ListPosAndCount) 
        type(nodeEmpl), pointer, intent(inout)     :: elemEmpl
        type(nodePosCount), pointer, intent(inout) :: ListPosAndCount

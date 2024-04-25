@@ -29,10 +29,6 @@ program ex_1_5
    type(employees) :: empls 
    ! Массивы где хранится  должности и количество сотрудников этой должности
    type(ResPosAndCount) :: Res
-  ! character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
-  ! integer, allocatable                        :: Counts(:)
-   ! Количество должностей
-  ! integer :: sizePosCounts = 0
    ! Создание файла данных
    call CreateDataFile(input_file, data_file)
    ! Ввод данных
