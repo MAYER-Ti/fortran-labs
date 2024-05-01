@@ -24,10 +24,10 @@ program ex_2
    SourceCode => ReadSourceCode(source_file)
    call ReadInput(input_file, indexFirst, indexLast, indexPaste)
    ! Вывод исходных данных
-   call WriteCode(output_file, SourceCode, "Исходный файл ------------------")
+   call WriteCode(output_file, SourceCode, "rewind", "------------------ Исходный файл ------------------")
    ! Обработка данных
-   ! call MovePartList(indexFirst, indexLast, indexPaste, SourceCode) 
+   call MovePartList(indexFirst, indexLast, indexPaste, SourceCode) 
    ! Вывод обработанных данных
-   call WriteCode(output_file, SourceCode, "Измененный файл -----------------")
+   call WriteCode(output_file, SourceCode, "append" , "----------------- Измененный файл ------------------")
 
 end program ex_2

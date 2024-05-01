@@ -45,14 +45,14 @@ contains
    end subroutine ReadSourceLine
  
    ! Вывод исходного кода.
-   subroutine WriteCode(OutputFile, Code, writeLetter)
-      character(*), intent(in)      :: OutputFile, writeLetter 
+   subroutine WriteCode(outputFile, Code, writePosition, writeLetter)
+      character(*), intent(in)      :: outputFile, writePosition, writeLetter 
       type(SourceLine), pointer, intent(in)  :: Code 
 
       integer  :: Out
       
-      open (file=OutputFile, encoding=E_, newunit=Out)
-         write (Out, '(a)') writeLetter 
+      open (file=outputFile, encoding=E_, position=writePosition, newunit=Out)
+         write (Out, '(/,a)') writeLetter 
          call WriteLine(Out, Code)
       close (Out)
 
