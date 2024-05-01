@@ -13,15 +13,15 @@ program ex_2
    implicit none
    character(:), allocatable :: source_file, input_file, output_file
 
-   type(SourceLine), pointer :: SourceCode ! Первоначальный код.
-   integer                   :: indexFirst = 0, indexLast = 0, indexPaste = 0
+   type(SourceLine), allocatable :: SourceCode ! Первоначальный код.
+   integer                       :: indexFirst = 0, indexLast = 0, indexPaste = 0
 
    source_file = "../data/source.f90"
    input_file  = "../data/input.txt"
    output_file = "Output.txt"
   
    ! Ввод данных  
-   SourceCode => ReadSourceCode(source_file)
+   SourceCode = ReadSourceCode(source_file)
    call ReadInput(input_file, indexFirst, indexLast, indexPaste)
    ! Вывод исходных данных
    call WriteCode(output_file, SourceCode, "rewind", "------------------ Исходный файл ------------------")

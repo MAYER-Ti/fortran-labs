@@ -5,17 +5,17 @@ module Source_IO
    
    ! Структура данных для хранения строки исходного текста.
    type SourceLine
-      character(:, CH_), allocatable   :: String
-      type(SourceLine), pointer    :: Next
+      character(:, CH_), allocatable :: String
+      type(SourceLine), allocatable  :: Next
    end type SourceLine
 
 contains
    ! Чтение исходного кода. 
    function ReadSourceCode(InputFile) result (Code)
-      character(*), intent(in)   :: InputFile
+      character(*), intent(in) :: InputFile
 
-      integer  :: In
-      type(SourceLine), pointer  :: Code
+      integer                       :: In
+      type(SourceLine), allocatable :: Code
       
       open (file=InputFile, encoding=E_, newunit=In)
          call ReadSourceLine(in, Code)
@@ -24,7 +24,7 @@ contains
 
    ! Чтение строки исходного кода.
    recursive subroutine ReadSourceLine(in, line)
-      type(SourceLine), pointer, intent(inout) :: line
+      type(SourceLine), allocatable, intent(inout) :: line
       integer, intent(in)                      :: In
 
       integer, parameter                       :: max_len = 1024
@@ -39,15 +39,13 @@ contains
          ! Хранение в размещаемом поле символов без завершающих пробелов.
          line%String = Trim(string)
          call ReadSourceLine(In, line%Next)
-      else 
-         line => Null()
       end if
    end subroutine ReadSourceLine
  
    ! Вывод исходного кода.
    subroutine WriteCode(outputFile, Code, writePosition, writeLetter)
-      character(*), intent(in)      :: outputFile, writePosition, writeLetter 
-      type(SourceLine), pointer, intent(in)  :: Code 
+      character(*), intent(in)                  :: outputFile, writePosition, writeLetter 
+      type(SourceLine), allocatable, intent(in) :: Code 
 
       integer  :: Out
       
@@ -60,14 +58,14 @@ contains
 
    ! Вывод строки исходного кода.
    recursive subroutine WriteLine(Out, line)
-      integer, intent(in)           :: Out
-      type(SourceLine), pointer, intent(in)  :: line
+      integer, intent(in)                       :: Out
+      type(SourceLine), allocatable, intent(in) :: line
 
       integer  :: IO
 
       write (Out, "(a)", iostat=IO) line%String
       call Handle_IO_Status(IO, "writing line to file")
-      if (Associated(line%next)) &
+      if (Allocated(line%next)) &
          call WriteLine(Out, line%next)
 
    end subroutine WriteLine
