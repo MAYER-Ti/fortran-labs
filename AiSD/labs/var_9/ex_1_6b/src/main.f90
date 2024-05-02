@@ -20,24 +20,20 @@ program ex_1_6b
    use IOGroup
 
    implicit none
-   character(*), parameter  :: input_file  = "../data/class.txt", &
-                               output_file = "output.txt", &
-                               data_file   = "group.dat" 
+   character(*), parameter :: input_file  = "../data/class.txt", output_file = "output.txt"
    ! Массивы фамилий, инициалов и года рождения 
    type(student), allocatable, target :: Group
-   type(student), pointer          :: studFirstAlph
-   type(student), pointer          :: studYougest
+   type(student), pointer          :: studFirstAlph => Null()
+   type(student), pointer          :: studYougest => Null()
    ! Ввод данных
    Group = ReadGroup(input_file) 
    ! Вывод исходных данных
    call WriteGroup(output_file, Group, 'rewind', 'Входные данные')
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   studFirstAlph => Group
-   call FirstForAlph(Group, studFirstAlph) 
+   call FirstForAlph(studFirstAlph, Group, Group) 
    ! Найти самого молодого
-   studYougest => Group
-   call Youngest(Group, studYougest)
+   call Youngest(studYougest, Group, Group)
    ! Вывод обработанных данных.
    call WriteElement(output_file, studFirstAlph, 'append', 'Первый по алфавиту:')
    call WriteElement(output_file, studYougest, 'append', 'Самый молодой:')

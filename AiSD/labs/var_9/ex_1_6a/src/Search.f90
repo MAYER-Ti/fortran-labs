@@ -6,27 +6,31 @@ module SearchesGroup
 
 contains
 
-   pure recursive subroutine FirstForAlph(stud, searchStud)
-      type(student), pointer, intent(inout) :: stud
-      type(student), pointer, intent(inout) :: searchStud
-      
+   pure recursive subroutine FirstForAlph(searchStud, stud, firstStud)
+      type(student), pointer, intent(inout) :: stud, firstStud, searchStud
+
       if(Associated(stud)) then
-         if(stud%sur < searchStud%sur) then
+         if(stud%sur < firstStud%sur) then
             searchStud => stud
+            call FirstForAlph(searchStud, stud%next, stud)
+         else 
+            searchStud => firstStud
+            call FirstForAlph(searchStud, stud%next, firstStud)
          end if
-         call FirstForAlph(stud%next, searchStud)
       end if
    end subroutine FirstForAlph 
 
-   pure recursive subroutine Youngest(stud, searchStud)
-      type(student), pointer, intent(inout)  :: stud
-      type(student), pointer, intent(inout) :: searchStud
+   pure recursive subroutine Youngest(searchStud, stud, youngestStud)
+      type(student), pointer, intent(inout) :: stud, youngestStud,searchStud
       
       if(Associated(stud)) then
-         if(stud%date > searchStud%date) then
+         if(stud%date > youngestStud%date) then
             searchStud => stud
+            call Youngest(searchStud, stud%next, stud)
+        else
+            searchStud => youngestStud
+            call Youngest(searchStud, stud%next, youngestStud)
          end if
-         call Youngest(stud%next, searchStud)
       end if
    end subroutine Youngest 
 

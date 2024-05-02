@@ -13,14 +13,14 @@ pure recursive function FirstForAlphIndex(surnames, minindex, i) result(searchIn
 
     if (i < GROUP_COUNT) then
         if (surnames(minindex) > surnames(i)) then
-            searchIndex = i
-            searchIndex = min(searchIndex, FirstForAlphIndex(surnames, i, i+1))
-        else
+            searchIndex = FirstForAlphIndex(surnames, i, i+1)
+        else 
             searchIndex = FirstForAlphIndex(surnames, minindex, i+1)
         end if
-    else
-        searchIndex = minindex
+    else 
+       searchIndex = minindex
     end if
+
 
 end function FirstForAlphIndex
 

@@ -66,7 +66,7 @@ contains
 
    subroutine WriteElement(output_file, stud, writeFilePostion, writeLetter)
       character(*), intent(in)  :: output_file, writeFilePostion, writeLetter
-      type(student), intent(in) :: stud
+      type(student), pointer, intent(in) :: stud
       
       integer :: IO, Out
 
