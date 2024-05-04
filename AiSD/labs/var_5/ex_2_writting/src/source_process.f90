@@ -21,7 +21,8 @@ contains
       ! type(SourceLine), pointer :: tmp2
 
        call CutSearchDiap(Code, CodeToInsert, TailToInsert, indexFirstLine, indexLastLine, indexToPaste, 1)
-       call InsertDiap(Code, CodeToInsert, TailToInsert, indexToPaste, 1)
+!       call InsertDiap(Code, CodeToInsert, TailToInsert, indexToPaste, 0)
+      call WriteCode("Output.txt", CodeToInsert, "append", "--------- test ----------")
        
        
 
@@ -53,14 +54,15 @@ contains
        integer, intent(in) :: indexFirstLine, indexLastLine, indexCur
 
        if(indexFirstLine <= indexCur .and. indexCur <= indexLastLine) then
-          call PutTail(CodeToInsert, TailToInsert, line)
+          ! Переместить line в CodeToInsert
+          call MoveToTail(CodeToInsert, TailToInsert, line)
           ! Сдвинуть индекс вставки
-          if(indexToPaste > indexLastLine) &
-              indexToPaste = indexToPaste - 1
+          if(indexToPaste > indexLastLine) indexToPaste = indexToPaste - 1
+          ! После перемещения ссылка line уже передвинута
+          call CutSearchDiap(line%next, CodeToInsert, TailToInsert, indexFirstLine, indexLastLine, indexToPaste, indexCur+1) 
+       else  if (Associated(line%next)) then 
+         call CutSearchDiap(line%next,CodeToInsert, TailToInsert, indexFirstLine, indexLastLine, indexToPaste, indexCur+1)  
        end if
-
-       if(Associated(line%next)) &
-         call CutSearchDiap(line%next,CodeToInsert , TailToInsert, indexFirstLine, indexLastLine, indexToPaste, indexCur+1)  
 
     end subroutine CutSearchDiap 
 !
@@ -76,28 +78,35 @@ contains
 !          call GetLineOnIndex(line%next, searchIndex, indexCur+1, searchLine) 
 !    end subroutine GetLineOnIndex
 
-    pure subroutine PutTail(Code, Tail, line)
-       type(SourceLine), pointer  :: Code, Tail, line
+    pure subroutine MoveToTail(Head, Tail, Elem)
+       type(SourceLine), pointer  :: Head, Tail, Elem
 
-       type(SourceLine), pointer :: tmp
-       
-       if (.not. Associated(Code)) then
-           ! Первый элемент
-           allocate(Code)
-           Code%String = line%String
-           Tail => Code
-       else if (.not. Associated(Tail%next)) then
-           allocate (Tail%next)
-           Tail%next%String = line%string
-           ! Передвинуть хвост
-           Tail => Tail%next
+      ! type(SourceLine), pointer :: tmp
+
+      if (.not. Associated(Head)) then
+         Head => Elem
+         Tail => Elem
+      else 
+         Tail => Elem
       end if
-      ! Убрать элемент из списка 
-      tmp => line
-      line => line%next
-      deallocate(tmp)
+       
+      ! if (.not. Associated(Code)) then
+      !     ! Первый элемент
+      !     allocate(Code)
+      !     Code%String = line%String
+      !     Tail => Code
+      ! else if (.not. Associated(Tail%next)) then
+      !     allocate (Tail%next)
+      !     Tail%next%String = line%string
+      !     ! Передвинуть хвост
+      !     Tail => Tail%next
+      ! end if
+      ! ! Убрать элемент из списка 
+      ! tmp => line
+      ! line => line%next
+      ! deallocate(tmp)
 
-    end subroutine PutTail
+    end subroutine MoveToTail
 
     pure recursive subroutine InsertDiap(line, CodeToInsert, TailToInsert, indexToPaste, indexCur)
         type(SourceLine), pointer, intent(inout) :: line, CodeToInsert, TailToInsert

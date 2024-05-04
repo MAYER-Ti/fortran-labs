@@ -28,6 +28,6 @@ program ex_2
    ! Обработка данных
    call MovePartList(indexFirst, indexLast, indexPaste, SourceCode) 
    ! Вывод обработанных данных
-   call WriteCode(output_file, SourceCode, "append" , "----------------- Измененный файл ------------------")
+   !call WriteCode(output_file, SourceCode, "append" , "----------------- Измененный файл ------------------")
 
 end program ex_2
