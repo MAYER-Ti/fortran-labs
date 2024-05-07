@@ -5,8 +5,8 @@ module Source_IO
    
    ! Структура данных для хранения строки исходного текста.
    type SourceLine
-      character(:, CH_), allocatable :: String
-      type(SourceLine), pointer  :: Next => Null()
+      character(:, CH_), allocatable :: string
+      type(SourceLine), pointer  :: next
    end type SourceLine
 
 contains
