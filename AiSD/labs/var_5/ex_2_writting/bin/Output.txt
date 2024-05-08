@@ -35,6 +35,13 @@ contains
 end module environment
 
 ----------------- Измененный файл ------------------
+   pure function IntPlusString(int, str) result(res)
+      integer, intent(in)                                   :: int
+      character(*), intent(in)                              :: str
+      character(len(str)+Floor(Log10(Real(int, real64)))+1) :: res
+
+      write (res,'(i0, a)') int, str
+   end function IntPlusString
 module environment
    use ISO_Fortran_Env
 
@@ -59,11 +66,4 @@ contains
 
    end function LeftPlusRight
 
-   pure function IntPlusString(int, str) result(res)
-      integer, intent(in)                                   :: int
-      character(*), intent(in)                              :: str
-      character(len(str)+Floor(Log10(Real(int, real64)))+1) :: res
-
-      write (res,'(i0, a)') int, str
-   end function IntPlusString
 end module environment

@@ -24,14 +24,14 @@ program ex_3
    character(*), parameter  :: input_file = "../data/input.txt", &
                                output_file = "output.txt"
    ! Массивы фамилий и должностей 
-   type(node), allocatable :: List 
+   type(node), pointer :: List 
    ! Ввод данных
-   List = ReadList(input_file) 
+   List => ReadList(input_file) 
    ! Вывод исходных данных
-   call WriteList(output_file, List, .false., 'rewind', 'Входные данные')
+   call WriteList(output_file, List, .false., 'rewind', 'Входные данные:')
    ! Обработка данных
-   !call RecCalcPos(List, Res) 
+   call Sort(List, List) 
    ! Вывод обработанных данных.
-   !call WriteList(output_file, Res, 'append', 'Кол-во должностей')
+   call WriteList(output_file, List, .true., 'append', 'Отсортированные данные:')
 
 end program ex_3
