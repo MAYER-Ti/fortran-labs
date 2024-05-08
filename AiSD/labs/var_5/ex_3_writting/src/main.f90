@@ -13,7 +13,6 @@
 ! в файл Out_len.
 ! После вывода динамический список S удалить
 !
-! Использовать recursive allocatable списки 
 ! Использовать хвостовую рекурсию
 program ex_3
    use Environment
@@ -24,14 +23,14 @@ program ex_3
    character(*), parameter  :: input_file = "../data/input.txt", &
                                output_file = "output.txt"
    ! Массивы фамилий и должностей 
-   type(node), pointer :: List 
+   type(node), pointer :: List => Null(), SortedList => Null()
    ! Ввод данных
    List => ReadList(input_file) 
    ! Вывод исходных данных
    call WriteList(output_file, List, .false., 'rewind', 'Входные данные:')
    ! Обработка данных
-   call Sort(List, List) 
+   call Sort(List, SortedList) 
    ! Вывод обработанных данных.
-   call WriteList(output_file, List, .true., 'append', 'Отсортированные данные:')
+   call WriteList(output_file, SortedList, .true., 'append', 'Отсортированные данные:')
 
 end program ex_3

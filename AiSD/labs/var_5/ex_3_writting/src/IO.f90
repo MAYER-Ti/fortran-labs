@@ -6,7 +6,6 @@ module IO
        character(:, kind=CH_), allocatable :: string
        type(node), pointer                 :: next => Null()
        type(node), pointer                 :: next_len => Null()
-       type(node), pointer                 :: prev_len => Null()
    end type node 
    
  contains
@@ -44,9 +43,9 @@ module IO
  
    ! Вывод списка
    subroutine WriteList(output_file, List, isSort, writeFilePostion, writeLetter)
-      character(*), intent(in)            :: output_file, writeFilePostion, writeLetter
+      character(*), intent(in)        :: output_file, writeFilePostion, writeLetter
       type(node), pointer, intent(in) :: List  
-      logical, intent(in)                 :: isSort
+      logical, intent(in)             :: isSort
 
       integer :: Out
 
