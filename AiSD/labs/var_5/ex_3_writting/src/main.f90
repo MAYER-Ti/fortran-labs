@@ -25,12 +25,12 @@ program ex_3
    ! Массивы фамилий и должностей 
    type(node), pointer :: List => Null(), SortedList => Null()
    ! Ввод данных
-   List => ReadList(input_file) 
+   call ReadList(input_file, List, SortedList) 
    ! Вывод исходных данных
-   call WriteList(output_file, List, .false., 'rewind', 'Входные данные:')
+   call WriteList(output_file, List, 'rewind', 'Входные данные:')
    ! Обработка данных
    call Sort(List, SortedList) 
    ! Вывод обработанных данных.
-   call WriteList(output_file, SortedList, .true., 'append', 'Отсортированные данные:')
+   call WriteSortedList(output_file, SortedList, 'append', 'Отсортированные данные:')
 
 end program ex_3
