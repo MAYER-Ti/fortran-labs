@@ -37,13 +37,13 @@ module IO
          allocate (elem)
          ! Хранение в размещаемом поле символов без завершающих пробелов.
          elem%string = Trim(string)
-         !call Put(SortedList, elem)
-         call ReadValue(In, elem%Next, SortedList)
+         !call Put(sortedList, elem)
+         call ReadValue(In, elem%next, SortedList)
       end if
    end subroutine ReadValue
 
    recursive subroutine Put(Sorted_current, current)
-      type(node), pointer  :: Sorted_current
+      type(node), pointer  :: Sorted_current, tmp
       type(node), target   :: current
 
       if (.not. Associated(Sorted_current)) then
@@ -51,15 +51,15 @@ module IO
          ! либо дошли до поледнего элемента.
          Sorted_current => current
          !Sorted_current%sorted_next => Null() 
-      else if (LEN(current%string) < LEN(Sorted_current%string)) then
+      else if (LEN(current%string) > LEN(Sorted_current%string)) then
          call Put(Sorted_current%next_len, current)
       else
-         !tmp => Sorted_current
-         !Sorted_current => current
-         !Sorted_current%sorted_next => tmp
-
-         current%next_len => Sorted_current
+         tmp => Sorted_current
          Sorted_current => current
+         Sorted_current%next_len => tmp
+
+        ! current%next_len => Sorted_current
+        ! Sorted_current => current
       end if
    end subroutine Put
  
@@ -76,6 +76,8 @@ module IO
          call WriteValue(Out, List)
       close (Out)
    end subroutine WriteList
+
+
    ! Вывод списка
    subroutine WriteSortedList(output_file, List, writeFilePostion, writeLetter)
       character(*), intent(in)        :: output_file, writeFilePostion, writeLetter

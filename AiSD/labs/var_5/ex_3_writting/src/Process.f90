@@ -11,33 +11,30 @@ contains
       write(*,*) SourceNode%string
 
       !call BindToSortedPart(sourceNode, SortedList)
-      call test(sourceNode, SortedList, SortedList)
+      call test(sourceNode, SortedList)
 
       if(Associated(SourceNode%next)) &
          call Sort(SourceNode%next, SortedList)
    end subroutine Sort
 
-   recursive subroutine test(nodeToBind, ListSorted, nodeSorted)
-      type(node), pointer, intent(inout) :: nodeToBind
-      type(node), pointer, intent(inout) :: ListSorted
+   recursive subroutine test(nodeToBind, nodeSorted)
+      type(node), target, intent(inout) :: nodeToBind
       type(node), pointer, intent(inout) :: nodeSorted
-      type(node), pointer :: tmp 
+      !type(node), pointer :: tmp 
       
       !Пустое начало
-      if(.not. Associated(ListSorted)) then
-         ! Голова списка ссылается на первый элемент
-         ListSorted => nodeToBind
+      if(.not. Associated(nodeSorted)) then
+          !nodeToBind%prev_len => nodeSorted
          nodeSorted => nodeToBind
-         nodeToBind%prev_len => Null()
-      else if(.not. Associated(nodeSorted)) then
-          nodeToBind%prev_len => nodeSorted
-         nodeSorted => nodeToBind
-      else if(LEN(nodeSorted%string) > LEN(nodeToBind%string)) then 
-         call test(nodeToBind, ListSorted, nodeSorted%next_len)
+      else if(LEN(nodeSorted%string) < LEN(nodeToBind%string)) then 
+         call test(nodeToBind, nodeSorted%next_len)
       else 
 
          write(*,*) "s ",  nodeSorted%string, ", ", nodeToBind%string
+         write(*,*) "L-", LEN(nodeSorted%string), " ", LEN(nodeToBind%string)
 
+         nodeToBind%next_len => nodeSorted
+         nodeSorted => nodeToBind
           
 
         ! tmp => nodeSorted%prev_len
@@ -46,12 +43,12 @@ contains
         ! 
         ! nodeToBind%next_len => nodeSorted
 
-         !tmp => nodeSorted%prev_len
-         !nodeToBind%prev_len => nodeSorted%prev_len
-         nodeToBind%prev_len => nodeSorted
-         tmp => nodeSorted
-         nodeSorted => nodeToBind
-         nodeToBind%next_len => tmp
+        ! tmp => nodeSorted%prev_len
+        ! nodeToBind%prev_len => nodeSorted%prev_len
+        ! nodeToBind%prev_len => nodeSorted
+        ! tmp => nodeSorted
+        ! nodeSorted => nodeToBind
+        ! nodeToBind%next_len => tmp
           
 
 
