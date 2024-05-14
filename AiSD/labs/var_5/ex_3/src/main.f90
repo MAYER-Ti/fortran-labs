@@ -16,21 +16,25 @@
 ! Использовать хвостовую рекурсию
 program ex_3
    use Environment
-   use IO
-   use Process
+   use mod_Sort
+   use mod_IO
 
    implicit none
-   character(*), parameter  :: input_file = "../data/input.txt", &
-                               output_file = "output.txt"
-   ! Массивы фамилий и должностей 
-   type(node), pointer :: List => Null(), SortedList => Null()
-   ! Ввод данных
-   call ReadList(input_file, List, SortedList) 
-   ! Вывод исходных данных
-   call WriteList(output_file, List, 'rewind', 'Входные данные:')
-   ! Обработка данных
-   call Sort(List, SortedList) 
-   ! Вывод обработанных данных.
-   call WriteSortedList(output_file, SortedList, 'append', 'Отсортированные данные:')
+   character(:), allocatable :: input_file, output_file, sort_output_file
 
+   type(node), pointer   :: List => Null(), SortedList => Null()
+
+   input_file  = "../data/list.txt"
+   output_file = "Out.txt"
+   sort_output_file = "Out_len.txt"
+   
+   !Ввод данных   
+   call ReadSortedList(input_file, List, SortedList)
+   !Вывод исходных данных
+   call WriteUnOrderedList(output_file, List, "Неотсортированный список:", "rewind")
+   !Обработка данных
+   call Sort(List, SortedList)
+   !Вывод обработанных данных 
+   call WriteOrderedList(sort_output_file, SortedList, "Отсортированный список:", "rewind")
+  
 end program ex_3
