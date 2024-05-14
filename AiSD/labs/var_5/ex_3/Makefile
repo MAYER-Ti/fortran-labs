@@ -7,8 +7,9 @@ all:
 	$(FC) $(FFLAGS) -c src/environment.f90 -J obj/ -o obj/environment.o
 	$(FC) $(FFLAGS) -c src/mod_io.f90 -J obj/ -o obj/mod_io.o
 	$(FC) $(FFLAGS) $(FOPT) -c src/mod_sort.f90 -J obj/ -o obj/mod_sort.o
+	$(FC) $(FFLAGS) $(FOPT) -c src/mod_delete.f90 -J obj/ -o obj/mod_delete.o
 	$(FC) $(FFLAGS) $(FOPT) -c src/main.f90 -I obj/ -o obj/main.o
-	$(FC) $(FFLAGS) $(FOPT) -o bin/app ./obj/environment.o ./obj/mod_io.o ./obj/mod_sort.o ./obj/main.o
+	$(FC) $(FFLAGS) $(FOPT) -o bin/app ./obj/environment.o ./obj/mod_io.o ./obj/mod_sort.o ./obj/mod_delete.o ./obj/main.o
 
 clean:
 	rm -rf obj/*

@@ -4,6 +4,9 @@ module mod_Sort
    use mod_IO
 
    implicit none
+   private
+
+   public :: Sort
 
 contains
 

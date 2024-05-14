@@ -3,12 +3,22 @@ module mod_IO
    use Environment
 
    implicit none
+   private
+
+   public :: list, node 
+   public :: ReadSortedList
+   public :: WriteOrderedList
+   public :: WriteUnorderedList
 
    type node
       character(:, kind=CH_), allocatable :: string
       type(node), pointer          :: next     => Null()
       type(node), pointer          :: next_len => Null()
    end type node
+   type list
+      type(node), pointer :: head
+      type(node), pointer :: sorted
+   end type
 
 contains
 
@@ -47,7 +57,7 @@ contains
       integer  :: Out
       
       open (file=outputFile, encoding=E_, position=writePosition, newunit=Out)
-         write (out, '(/a)') writeLetter
+         write (out, '(a)') writeLetter
          call WriteUnorderedValue(Out, List)
       close (Out)
    end subroutine WriteUnorderedList
@@ -72,7 +82,7 @@ contains
       integer  :: Out
       
       open (file=outputFile, encoding=E_, position=writePosition, newunit=Out)
-         write (out, '(/a)') writeLetter
+         write (out, '(a)') writeLetter
          call WriteOrderedValue(Out, SortedList)
       close (Out)
    end subroutine WriteOrderedList  

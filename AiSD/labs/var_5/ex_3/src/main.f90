@@ -17,24 +17,27 @@
 program ex_3
    use Environment
    use mod_Sort
+   use mod_Delete
    use mod_IO
 
    implicit none
    character(:), allocatable :: input_file, output_file, sort_output_file
 
-   type(node), pointer   :: List => Null(), SortedList => Null()
+   type(list) :: dList
 
    input_file  = "../data/list.txt"
    output_file = "Out.txt"
    sort_output_file = "Out_len.txt"
    
    !Ввод данных   
-   call ReadSortedList(input_file, List, SortedList)
+   call ReadSortedList(input_file, dList%head, dList%sorted)
    !Вывод исходных данных
-   call WriteUnOrderedList(output_file, List, "Неотсортированный список:", "rewind")
+   call WriteUnOrderedList(output_file, dList%head, "Неотсортированный список:", "rewind")
    !Обработка данных
-   call Sort(List, SortedList)
+   call Sort(dList%head, dList%sorted)
    !Вывод обработанных данных 
-   call WriteOrderedList(sort_output_file, SortedList, "Отсортированный список:", "rewind")
+   call WriteOrderedList(sort_output_file, dList%sorted, "Отсортированный список:", "rewind")
+   !Освобождение данных 
+   call Delete(dList)
   
 end program ex_3
