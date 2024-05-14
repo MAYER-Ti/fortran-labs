@@ -62,27 +62,35 @@ contains
         type(SourceLine), pointer, intent(inout) :: Code, CodeToInsert, TailToInsert
         integer, intent(in)                      :: indexToPaste
 
-        integer :: indexCur
-        type(SourceLine), pointer :: curLine, tmp
+        type(SourceLine), pointer :: tmp
 
-        curLine => Code
-        indexCur = 0
         if(indexToPaste == 0) then 
            tmp  => Code
            Code => CodeToInsert
            TailToInsert%next => tmp
        else
-           do while(Associated(curLine)) 
-              if(indexCur == indexToPaste) then 
-                 tmp => curLine%next
-                 curLine%next => CodeToInsert
-                 TailToInsert%next => tmp
-                 exit
-              end if
-              curLine => curLine%next
-              indexCur = indexCur + 1
-           end do
+           call InsertDiap_val(Code, CodeToInsert, TailToInsert, &
+                               indexToPaste, 0)
         end if 
     end subroutine InsertDiap
+
+    pure recursive subroutine InsertDiap_val(curLine, CodeToInsert, TailToInsert, &
+                                            indexToPaste, indexCur)
+       type(SourceLine), pointer, intent(inout) :: curLine, CodeToInsert, TailToInsert
+       integer, intent(in)                      :: indexToPaste, indexCur
+
+       type(SourceLine), pointer :: tmp
+
+       if(Associated(curLine)) then
+          if(indexCur == indexToPaste) then 
+             tmp => curLine%next
+             curLine%next => CodeToInsert
+             TailToInsert%next => tmp
+          else
+             call InsertDiap_val(curLine%next, CodeToInsert, TailToInsert, &
+                                 indexToPaste, indexCur+1)
+          end if
+       end if
+    end subroutine InsertDiap_val
 
 end module Source_process
