@@ -29,7 +29,7 @@ contains
                       indexFirstLine, indexLastLine, &
                       tmpBeforeList, tmpAfterList, 1)
 
-       tmpBeforeList%next => tmpAfterList%next
+       tmpBeforeList%next => tmpAfterList
 
        if(indexToPaste > indexLastLine) &
            indexToPaste = indexToPaste-2 - (indexLastLine+1-indexFirstLine)

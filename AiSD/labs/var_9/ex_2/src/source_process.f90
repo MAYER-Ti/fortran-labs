@@ -27,7 +27,7 @@ contains
 
       call SearchPart(List, ListPart, TailPart, F, L, tmpBeforeList, tmpAfterList, 1)
 
-       tmpBeforeList%next => tmpAfterList%next
+       tmpBeforeList%next => tmpAfterList
 
        if(M > L) &
            M= M-2-(L+1-F)
