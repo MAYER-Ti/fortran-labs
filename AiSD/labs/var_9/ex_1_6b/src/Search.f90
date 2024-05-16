@@ -12,12 +12,12 @@ contains
       
       if(Allocated(stud)) then
          if(stud%sur < firstStud%sur) then
-            searchStud => stud
             call FirstForAlph(searchStud, stud%next, stud)
          else 
-            searchStud => firstStud
             call FirstForAlph(searchStud, stud%next, firstStud)
          end if
+     else
+         searchStud => firstStud
       end if
    end subroutine FirstForAlph 
 
@@ -27,12 +27,12 @@ contains
       
       if(Allocated(stud)) then
          if(stud%date > youngestStud%date) then
-            searchStud => stud
             call Youngest(searchStud, stud%next, stud)
         else
-            searchStud => youngestStud
             call Youngest(searchStud, stud%next, youngestStud)
          end if
+     else
+         searchStud => youngestStud
       end if
    end subroutine Youngest 
 

@@ -2,12 +2,16 @@ module Source_IO
    use Environment
 
    implicit none
+   private
    
    ! Структура данных для хранения строки исходного текста.
-   type SourceLine
+   type node 
       character(:, CH_), allocatable :: string
-      type(SourceLine), pointer  :: next
-   end type SourceLine
+      type(node), allocatable  :: next
+   end type node 
+   type list 
+      type(node), allocatable :: head
+   end type list
 
 contains
    ! Чтение исходного кода. 
