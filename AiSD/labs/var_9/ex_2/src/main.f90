@@ -5,30 +5,29 @@
 ! набору вводимых данных соответствует ситуация, когда
 ! 0≤First≤Last и M не входит в диапазон [First, Last].
 ! Указание. Элементом списка является строка.
-
 program ex_2
    use Environment
    use Source_Process
-   use Source_IO
+   use mod_list
 
    implicit none
    character(:), allocatable :: source_file, input_file, output_file
 
-   type(line), pointer :: List ! Первоначальный код.
-   integer             :: F = 0, L = 0, M = 0
+   type(list) :: SourceCode ! Первоначальный код.
+   integer    :: indexFirst = 0, indexLast = 0, indexPaste = 0
 
    source_file = "../data/source.f90"
    input_file  = "../data/input.txt"
    output_file = "Output.txt"
   
    ! Ввод данных  
-   List => ReadList(source_file)
-   call ReadInput(input_file, F, L, M)
+   call SourceCode%ReadCode(source_file)
+   call ReadInput(input_file, indexFirst, indexLast, indexPaste)
    ! Вывод исходных данных
-   call WriteList(output_file, List, "rewind", "Исходный файл ------------------------------------")
+   call SourceCode%WriteCode(output_file, "rewind", "------------------ Исходный файл ------------------")
    ! Обработка данных
-   call MovePartList(F, L, M, List)
+   call SourceCode%CopyPastePartList(indexFirst, indexLast, indexPaste)
    ! Вывод обработанных данных
-   call WriteList(output_file, List, "append" , "Измененный файл ------------------------------------")
+   call SourceCode%WriteCode(output_file, "append" , "----------------- Измененный файл ------------------")
 
 end program ex_2
