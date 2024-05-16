@@ -16,7 +16,7 @@ contains
             call FirstForAlph(searchStud, stud%next, firstStud)
          end if
        else 
-            searchStud => firstStud
+         searchStud => firstStud
       end if
    end subroutine FirstForAlph 
 
