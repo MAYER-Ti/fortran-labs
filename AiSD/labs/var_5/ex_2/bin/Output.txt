@@ -35,8 +35,6 @@ contains
 end module environment
 
 ----------------- Измененный файл ------------------
-module environment
-   use ISO_Fortran_Env
    pure function IntPlusString(int, str) result(res)
       integer, intent(in)                                   :: int
       character(*), intent(in)                              :: str
@@ -44,6 +42,8 @@ module environment
 
       write (res,'(i0, a)') int, str
    end function IntPlusString
+module environment
+   use ISO_Fortran_Env
 
    implicit none
 
@@ -56,6 +56,7 @@ module environment
    end interface
 
 contains
+
 
    pure function LeftPlusRight(left, right) result(res)
       integer, intent(in) :: left, right

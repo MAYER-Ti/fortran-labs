@@ -8,26 +8,26 @@
 program ex_2
    use Environment
    use Source_Process
-   use Source_IO
+   use mod_list
 
    implicit none
    character(:), allocatable :: source_file, input_file, output_file
 
-   type(SourceLine), pointer :: SourceCode ! Первоначальный код.
-   integer                   :: indexFirst = 0, indexLast = 0, indexPaste = 0
+   type(list) :: SourceCode ! Первоначальный код.
+   integer    :: indexFirst = 0, indexLast = 0, indexPaste = 0
 
    source_file = "../data/source.f90"
    input_file  = "../data/input.txt"
    output_file = "Output.txt"
   
    ! Ввод данных  
-   SourceCode => ReadSourceCode(source_file)
+   call SourceCode%ReadSourceCode(source_file)
    call ReadInput(input_file, indexFirst, indexLast, indexPaste)
    ! Вывод исходных данных
-   call WriteCode(output_file, SourceCode, "rewind", "------------------ Исходный файл ------------------")
+   call SourceCode%WriteCode(output_file, "rewind", "------------------ Исходный файл ------------------")
    ! Обработка данных
-   call MovePartList(indexFirst, indexLast, indexPaste, SourceCode)
+   call SourceCode%MovePartList(indexFirst, indexLast, indexPaste)
    ! Вывод обработанных данных
-   call WriteCode(output_file, SourceCode, "append" , "----------------- Измененный файл ------------------")
+   call SourceCode%WriteCode(output_file, "append" , "----------------- Измененный файл ------------------")
 
 end program ex_2
