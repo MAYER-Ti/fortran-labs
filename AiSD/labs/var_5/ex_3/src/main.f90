@@ -16,9 +16,7 @@
 ! Использовать хвостовую рекурсию
 program ex_3
    use Environment
-   use mod_Sort
-   use mod_Delete
-   use mod_IO
+   use mod_list
 
    implicit none
    character(:), allocatable :: input_file, output_file, sort_output_file
@@ -30,14 +28,12 @@ program ex_3
    sort_output_file = "Out_len.txt"
    
    !Ввод данных   
-   call ReadSortedList(input_file, dList%head, dList%sorted)
+   call dList%ReadSortedList(input_file)
    !Вывод исходных данных
-   call WriteUnOrderedList(output_file, dList%head, "Неотсортированный список:", "rewind")
+   call dList%WriteUnOrderedList(output_file, "Неотсортированный список:", "rewind")
    !Обработка данных
-   call Sort(dList%head, dList%sorted)
+   call dList%Sort(dList%head, dList%sorted)
    !Вывод обработанных данных 
-   call WriteOrderedList(sort_output_file, dList%sorted, "Отсортированный список:", "rewind")
-   !Освобождение данных 
-   call Delete(dList)
+   call dList%WriteOrderedList(sort_output_file, "Отсортированный список:", "rewind")
   
 end program ex_3
