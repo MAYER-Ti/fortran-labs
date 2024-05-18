@@ -31,7 +31,7 @@ program ex_3
    !Вывод исходных данных
    call dList%WriteList(output_file, "Неотсортированный список:", "rewind")
    !Обработка данных
-   call dList%Sort()
+   call dList%InsertionSort(dList%head, dList%head)
    !Вывод обработанных данных 
    call dList%WriteList(output_file, "Отсортированный список:", "append")
   

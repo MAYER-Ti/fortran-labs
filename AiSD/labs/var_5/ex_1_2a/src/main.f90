@@ -25,20 +25,17 @@ program ex_1_2a
    implicit none
    character(*), parameter  :: input_file = "../data/class.txt" , output_file = "output.txt"
    ! Массивы фамилий и должностей 
-   character(kind=CH_)      :: surnames(EMPLOYEE_COUNT, BLOCK_LEN) = "", &
-                               positions(EMPLOYEE_COUNT, BLOCK_LEN) = ""
+   character(kind=CH_), allocatable :: surnames(:, BLOCK_LEN) ,positions(:, BLOCK_LEN) 
    ! Массивы где хранится  должности и количество сотрудников этой должности
    character(kind=CH_), allocatable :: Poss(:,:)
    integer, allocatable             :: Counts(:)
-   ! Количество должностей
-   integer :: countPositions = 0
    ! Ввод данных
    call ReadEmployee(input_file, surnames, positions) 
    ! Вывод исходных данных
-   call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
+   !call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
    ! Обработка данных
-   call  CalcPos(positions, Poss, Counts, countPositions) 
+   call  CalcPos(positions, Poss, Counts) 
 !   ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
+   call WriteCountPositions(output_file, Poss, Counts, Ubound(, 'rewind', 'Кол-во должностей')
 
 end program ex_1_2a

@@ -10,7 +10,11 @@ Stalin
 Putin
 
 Отсортированный список:
-Stalin
-Kukuruzov
-Frolov
+Arhimedova
 Borisov
+Frolov
+Kukuruzov
+Kutuzov
+Melnikov
+Putin
+Stalin

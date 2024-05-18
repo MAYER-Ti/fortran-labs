@@ -12,59 +12,45 @@ module mod_list
    type, public :: list
       type(node), allocatable :: head
       contains
-          procedure, public :: ReadList
-          procedure, public :: WriteList
-          procedure, public :: Sort
-          final             :: Delete
+          procedure, public         :: ReadList
+          procedure, public         :: WriteList
+          procedure, public, nopass :: InsertionSort
+          final                     :: Delete
    end type
 
 contains
-   subroutine Sort(dList)
-      class(list), intent(inout) :: dList
 
-      type(node), allocatable :: SortedList
+   recursive subroutine InsertionSort(List, lastSorted)
+      type(node), allocatable, intent(inout) :: List 
+      type(node), allocatable, intent(inout) :: lastSorted
+      type(node), allocatable :: tmp
 
-      call InsertionSort(dList%head, SortedList)
-      call move_alloc(SortedList, dList%head)
-
-   end subroutine Sort
-
-   recursive subroutine InsertionSort(current, ListSort)
-      type(node), allocatable, intent(inout) :: current
-      type(node), allocatable, intent(inout) :: ListSort
-
-
-      if(Allocated(current)) then 
-
-         call SortStep(ListSort, current)
-
-         call InsertionSort(current%next, ListSort)
+      if(Allocated(lastSorted%next)) then 
+         if(lastSorted%next%string < lastSorted%string) then
+            ! Вырезать из списка элемент
+            call move_alloc(lastSorted%next, tmp)
+            call move_alloc(tmp%next, lastSorted%next)
+            ! Вставить в нужное место
+            call Paste(List, tmp)
+            call InsertionSort(List, lastSorted)
+         else 
+            call InsertionSort(List, lastSorted%next)
+         end if
       end if
 
    end subroutine InsertionSort
 
-   pure recursive subroutine SortStep(curSorted, nodeToInsert)
-      type(node), allocatable, intent(inout) :: nodeToInsert
-      type(node), allocatable, intent(inout) :: curSorted
+   pure recursive subroutine Paste(current, nodeToInsert)
+      type(node), allocatable, intent(inout) :: current, nodeToInsert
 
-      type(node), allocatable :: tmp, tmp2
-
-      if (.not. Allocated(curSorted)) then
-         ! Либо голова не размещена,
-         ! либо дошли до поледнего элемента.
-         call move_alloc(nodeToInsert%next, tmp)
-         call move_alloc(nodeToInsert, curSorted)
-         call move_alloc(tmp, nodeToInsert)
-      else if (nodeToInsert%string <= curSorted%string) then
-         call SortStep(curSorted%next, nodeToInsert)
-      else
-         call move_alloc(nodeToInsert%next, tmp)
-         call move_alloc(curSorted, tmp2)
-         call move_alloc(nodeToInsert, curSorted)
-         call move_alloc(tmp2, curSorted%next)
-         call move_alloc(tmp, nodeToInsert)
+      if(nodeToInsert%string < current%string) then
+         call move_alloc(current, nodeToInsert%next)
+         call move_alloc(nodeToInsert, current) 
+      else 
+         call Paste(current%next, nodeToInsert)
       end if
-   end subroutine SortStep
+
+   end subroutine Paste
 
    pure subroutine Delete(dList)
 
