@@ -5,14 +5,11 @@ module SearchesGroup
    implicit none
 
 contains
-    pure function SearchFirstForAlph(Surnames) result(searchIndex)
-      character(kind=CH_), intent(in) :: Surnames(GROUP_COUNT, SURNAME_LEN)
+    pure function SearchFirstForAlph1(Surnames, GROUP_COUNT) result(searchIndex) 
+      character(kind=CH_), allocatable, intent(in)  :: Surnames(:, :)
+      integer, intent(in) :: GROUP_COUNT
  
       integer :: searchIndex, i, j 
-      ! i - Номер студента, j - номер символа в фамилии
-
-      ! searchIndex = FindLoc(Surnames(:,1), MinVal(Surnames(:,1), 1), 1) 
-      ! При MinLoc(Surnames(1:),1) происходит неправильный поиск 
 
       searchIndex = 1
       do i = 2, GROUP_COUNT
@@ -29,11 +26,37 @@ contains
             exit
          end do
       end do
+    end function SearchFirstForAlph1
+ 
+    pure function SearchFirstForAlph(Surnames, GROUP_COUNT) result(searchIndex)
+      character(kind=CH_), allocatable, intent(in) :: Surnames(:,:)
+      integer, intent(in) :: GROUP_COUNT
+ 
+      integer :: searchIndex, i
+      ! i - Номер студента, j - номер символа в фамилии
 
+       searchIndex = 1
+       do i = 2, GROUP_COUNT
+          if(LBTR(Surnames(searchIndex, :), Surnames(i,:))) then
+              searchIndex = i
+          end if
+       end do
    end function SearchFirstForAlph 
 
+   pure logical function LBTR(arr1, arr2)
+       character(kind=CH_), intent(in) :: arr1(:), arr2(:)
+ 
+       integer :: i
+ 
+       do i = 1, Min(Size(arr1), Size(arr2)) - 1
+          if (arr1(i) /= arr2(i)) &
+             exit
+       end do
+       LBTR = arr1(i) > arr2(i)
+    end function LBTR
+
    pure function SearchYoungest(Dates) result(searchIndex)
-      integer, intent(in) :: Dates(GROUP_COUNT)
+      integer, allocatable, intent(in) :: Dates(:)
  
       integer :: searchIndex  
 

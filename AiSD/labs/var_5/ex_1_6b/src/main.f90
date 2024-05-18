@@ -22,6 +22,7 @@ program ex_1_6b
    use Process
 
    implicit none
+   real(8) :: start_time = 0, end_time = 0
    character(*), parameter  :: input_file = "../data/class.txt", &
                                output_file = "output.txt", &
                                data_file   = "employee.dat"
@@ -32,9 +33,13 @@ program ex_1_6b
    ! Ввод данных
    List = ReadList(input_file) 
    ! Вывод исходных данных
-   call WriteList(output_file, List, 'rewind', 'Входные данные')
+   !call WriteList(output_file, List, 'rewind', 'Входные данные')
+   call cpu_time(start_time)
    ! Обработка данных
    call RecCalcPos(List, Res) 
+
+   call cpu_time(end_time)
+   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
    ! Вывод обработанных данных.
    call WriteList(output_file, Res, 'append', 'Кол-во должностей')
 

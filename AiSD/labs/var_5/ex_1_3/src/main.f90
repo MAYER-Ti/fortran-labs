@@ -19,27 +19,36 @@ program ex_1_3
    use Environment
    use IOEmployee
    use calcPositions
-
    implicit none
-   character(*), parameter  :: input_file = "../data/class.txt", &
+
+   integer :: cpu_time = 0, start_time = 0, end_time = 0
+   real(R_) :: elapsed_time = 0.0
+   ! "../data/class.txt"
+   character(*), parameter  :: input_file = "../../ex_1_1/data/class.txt", &
                                output_file = "output.txt", &
                                data_file   = "employee.dat"
+   integer :: EMPLOYEE_COUNT = 0
    ! Массивы фамилий и должностей 
-   type(employee) :: employees(EMPLOYEE_COUNT) 
+   type(employee), allocatable :: employees(:) 
    ! Массивы где хранится  должности и количество сотрудников этой должности
    character(BLOCK_LEN, kind=CH_), allocatable :: Poss(:)
    integer, allocatable                        :: Counts(:)
-   ! Количество должностей
-   integer :: countPositions = 0
    ! Создание файла данных
-   call CreateDataFile(input_file, data_file)
+   call CreateDataFile(input_file, data_file, EMPLOYEE_COUNT)
    ! Ввод данных
-   employees = ReadEmployees(data_file) 
+   call ReadEmployees(data_file, employees, EMPLOYEE_COUNT)
    ! Вывод исходных данных
-   call WriteEmployee(output_file, employees, 'rewind', 'Входные данные')
+   !call WriteEmployee(output_file, employees, 'rewind', 'Входные данные')
+   call system_clock(count_rate=cpu_time)
+   call system_clock(count=start_time)
    ! Обработка данных
-   call  CalcPos(employees, Poss, Counts, countPositions) 
+   call  CalcPos(employees, EMPLOYEE_COUNT, Poss, Counts) 
+
+   call system_clock(count=end_time)
+   elapsed_time = (real(end_time-start_time)/real(cpu_time)) * 1000
+   print *, start_time, end_time
+   print *, 'Время выполнения', elapsed_time, 'миллисекунд'
    ! Вывод обработанных данных.
-   call WriteCountPositions(output_file, Poss, Counts, countPositions, 'append', 'Кол-во должностей')
+   call WriteCountPositions(output_file, Poss, Counts, 'rewind', 'Кол-во должностей')
 
 end program ex_1_3

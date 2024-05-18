@@ -4,9 +4,10 @@ module calcPositions
    implicit none
 
 contains
-    pure subroutine SearchPositions(positions, Res)
-        character(BLOCK_LEN,kind=CH_), intent(in) :: positions(EMPLOYEE_COUNT)
+    pure subroutine SearchPositions(positions, EMPLOYEE_COUNT, Res)
+        character(BLOCK_LEN,kind=CH_), allocatable, intent(in) :: positions(:)
         type(ResPosAndCount), intent(out)         :: Res
+        integer, intent(in)                        :: EMPLOYEE_COUNT
 
         integer :: i, OutCountAndPos(2, EMPLOYEE_COUNT), sizeCountAndPos
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
@@ -15,7 +16,7 @@ contains
         matched         = .false.
         locPosition     = .false.
         ! Рекурсивный подсчет должностей
-        call RecCalcPos(positions, OutCountAndPos, sizeCountAndPos, matched, locPosition, 1)     
+        call RecCalcPos(positions, EMPLOYEE_COUNT, OutCountAndPos, sizeCountAndPos, matched, locPosition, 1)     
         ! Запись полученных данных 
         allocate(Res%pos(sizeCountAndPos), Res%counts(sizeCountAndPos))
         Res%sizePos = sizeCountAndPos
@@ -26,9 +27,9 @@ contains
 
     end subroutine SearchPositions   
 
-    pure recursive subroutine RecCalcPos(positions, OutCountAndPos, sizeCountAndPos, matched, locPosition, i) 
-       character(BLOCK_LEN,kind=CH_), intent(in) :: positions(EMPLOYEE_COUNT)
-       integer, intent(in)    :: i 
+    pure recursive subroutine RecCalcPos(positions, EMPLOYEE_COUNT, OutCountAndPos, sizeCountAndPos, matched, locPosition, i) 
+       character(BLOCK_LEN,kind=CH_), allocatable, intent(in) :: positions(:)
+       integer, intent(in)    :: i, EMPLOYEE_COUNT 
        integer, intent(inout) :: OutCountAndPos(2, EMPLOYEE_COUNT), sizeCountAndPos
        logical, intent(inout) :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
        
@@ -47,16 +48,17 @@ contains
           locPosition = .false.
        end if 
        if(i < EMPLOYEE_COUNT) then
-          call RecCalcPos(positions, OutCountAndPos, sizeCountAndPos, matched, locPosition, i + 1)
+          call RecCalcPos(positions, EMPLOYEE_COUNT, OutCountAndPos, sizeCountAndPos, matched, locPosition, i + 1)
        end if
     end subroutine RecCalcPos
 
-    pure subroutine CalcPos(empls, outPos, outCount, countPositions)
+    pure subroutine CalcPos(empls, EMPLOYEE_COUNT, outPos, outCount)
         type(employees), intent(in)                              :: empls
         character(BLOCK_LEN, kind=CH_), allocatable, intent(out) :: outPos(:) 
         integer, allocatable, intent(out)                        :: outCount(:)
-        integer, intent(inout)                                   :: countPositions   
+        integer, intent(inout)                                   :: EMPLOYEE_COUNT   
         
+        integer :: countPositions
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
         integer :: i, posAndCount(2, EMPLOYEE_COUNT)
 

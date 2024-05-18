@@ -4,18 +4,20 @@ module calcPositions
    implicit none
 
 contains
-    pure subroutine CalcPos(positions, outPos, outCount, countPositions)
-        character(kind=CH_), intent(in)  :: positions(EMPLOYEE_COUNT, BLOCK_LEN)
+    pure subroutine CalcPos(positions, positionsSize, outPos, outCount)
+        character(kind=CH_), allocatable, intent(in)  :: positions(:,:)
         character(kind=CH_), allocatable, intent(out) :: outPos(:,:) 
-        integer, allocatable, intent(out) :: outCount(:)
-        integer, intent(inout)           :: countPositions   
+        integer, allocatable, intent(out)             :: outCount(:)
+        integer, intent(in)                           :: positionsSize  
         
-        logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
-        integer :: i, j, posAndCount(2, EMPLOYEE_COUNT)
+        integer :: countPositions
+        logical :: matched(positionsSize), locPosition(positionsSize)
+        integer :: i, j, posAndCount(2, positionsSize)
+
         countPositions = 0 
         matched = .false.
         locPosition = .false.
-        do i = 1,EMPLOYEE_COUNT
+        do i = 1, positionsSize
            ! Когда должность еще не обрабатывалась
            if (.not. matched(i)) then
                ! Посчитать новую должность
@@ -23,7 +25,7 @@ contains
                ! Совпадает сама с собой 
                locPosition(i) = .true.
                ! Создание маски 
-               do concurrent (j = i+1:EMPLOYEE_COUNT)
+               do concurrent (j = i+1:positionsSize)
                   locPosition(j) = ALL(positions(j,:) == positions(i,:))
                end do
                !Трудности при замене на сечение!
@@ -32,7 +34,7 @@ contains
                posAndCount(1, countPositions) = i ! Позиция с должностью 
                posAndCount(2, countPositions) = Count(locPosition) ! Кол-во сотрудников с этой должностью
                ! Обновить массив совпадений для следующих итераций цикла
-               matched(i:EMPLOYEE_COUNT) = matched(i:EMPLOYEE_COUNT) .or. locPosition(i:EMPLOYEE_COUNT)
+               matched(i:positionsSize) = matched(i:positionsSize) .or. locPosition(i:positionsSize)
                locPosition = .false.
            end if
         end do

@@ -3,7 +3,7 @@ module IOEmployee
    implicit none
 
 
-   integer, parameter ::  EMPLOYEE_COUNT = 7, BLOCK_LEN = 15
+   integer, parameter :: BLOCK_LEN = 15
 
    type nodeEmpl 
        character(BLOCK_LEN, kind=CH_) :: sur = ""
@@ -92,7 +92,7 @@ module IOEmployee
       integer  :: IO
 
       if (Allocated(Elem)) then 
-         write (Out, '(a, 1x, i3)', iostat=IO) Elem%pos, Elem%counts
+         write (Out, '(a, 1x, i7)', iostat=IO) Elem%pos, Elem%counts
          call Handle_IO_status(IO, "Некорректный вывод количества должностей")
          call WriteValue_Pos(Out, Elem%next)
       end if

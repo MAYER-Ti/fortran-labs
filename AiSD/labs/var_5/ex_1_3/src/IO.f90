@@ -4,7 +4,7 @@ module IOEmployee
    implicit none
 
 
-   integer, parameter ::  EMPLOYEE_COUNT = 7, BLOCK_LEN = 15
+   integer, parameter :: BLOCK_LEN = 15
 
    type employee
        character(BLOCK_LEN, kind=CH_) :: sur  = ""
@@ -13,8 +13,9 @@ module IOEmployee
 
 
 contains
-   subroutine CreateDataFile(input_file, data_file)
+   subroutine CreateDataFile(input_file, data_file, EMPLOYEE_COUNT)
        character(*), intent(in) :: input_file, data_file
+       integer, intent(inout)   :: EMPLOYEE_COUNT
 
        type(employee)            :: empl
        integer                   :: In, Out, IO, i, sizeOfOneEmployee 
@@ -23,6 +24,7 @@ contains
        open (file=input_file, encoding=E_, newunit=In)
        sizeOfOneEmployee = (BLOCK_LEN*2+1)*CH_ 
        open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneEmployee)
+          read (In, '(i7)') EMPLOYEE_COUNT
           format = '(a, 1x, a)'
           do i = 1, EMPLOYEE_COUNT
              ! Чтение из входного файла
@@ -36,12 +38,14 @@ contains
        close (In)
    end subroutine CreateDataFile
 
-   function ReadEmployees(data_file) result(employees) 
-      character(*)     :: data_file 
-      type(employee)   :: employees(EMPLOYEE_COUNT)
+   subroutine ReadEmployees(data_file, employees, EMPLOYEE_COUNT) 
+      character(*)                :: data_file 
+      type(employee), allocatable :: employees(:)
+      integer, intent(in)         :: EMPLOYEE_COUNT
       
       integer :: i, In, IO, sizeOfOneEmployee 
       
+      allocate(employees(EMPLOYEE_COUNT))
       sizeOfOneEmployee = (BLOCK_LEN*2+1)*CH_ 
       open (file=data_file, form='unformatted', newunit=In, access='direct', recl=sizeOfOneEmployee)
       do i = 1, EMPLOYEE_COUNT
@@ -49,11 +53,11 @@ contains
          call Handle_IO_status(IO, "Чтение из бинарного файла некорректно")
       end do
       close (In)
-   end function ReadEmployees 
+   end subroutine ReadEmployees 
    
    subroutine WriteEmployee(output_file, employees, writeFilePostion, writeLetter)
       character(*), intent(in)   :: output_file, writeFilePostion, writeLetter
-      type(employee), intent(in) :: employees(EMPLOYEE_COUNT)  
+      type(employee), allocatable, intent(in) :: employees(:)  
 
       integer                    :: Out = 0, IO = 0
       character(:), allocatable  :: format
@@ -66,18 +70,20 @@ contains
       close (Out)
     end subroutine WriteEmployee
 
-   subroutine WriteCountPositions(output_file, pos, counts, countPositions, writeFilePostion, writeLetter)
+   subroutine WriteCountPositions(output_file, pos, counts, writeFilePostion, writeLetter)
       character(*), intent(in)                               :: output_file, writeFilePostion, writeLetter
       character(BLOCK_LEN,kind=CH_), allocatable, intent(in) :: pos(:)      
       integer, allocatable                                   :: counts(:)
-      integer                                                :: countPositions
 
+      integer                                                :: countPositions
       integer                   :: i = 0, Out = 0, IO = 0
       character(:), allocatable :: format
 
+      countPositions = Ubound(pos, 1)
+
       open (file=output_file, encoding=E_, position=writeFilePostion, newunit=Out)
             write (Out, '(a)') writeLetter
-            format = '('//countPositions//'(a, 1x, i3,/))'
+            format = '('//countPositions//'(a, 1x, i7,/))'
             write (Out, format, iostat=IO) (pos(i), counts(i), i = 1, countPositions) 
             call Handle_IO_status(IO, "write employee positions")
       close (Out)     

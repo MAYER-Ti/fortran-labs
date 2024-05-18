@@ -2,7 +2,7 @@ module IOGroup
    use Environment
    implicit none
 
-   integer, parameter ::  GROUP_COUNT = 7, SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
+   integer, parameter :: SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
 
    type student
       character(SURNAME_LEN, kind=CH_)  :: sur = ""
@@ -10,14 +10,16 @@ module IOGroup
       integer                           :: date = 0
    end type student
 contains
-   subroutine CreateDataFile(input_file, data_file)
+   subroutine CreateDataFile(input_file, data_file, GROUP_COUNT)
       character(*), intent(in) :: input_file, data_file
+      integer, intent(inout)   :: GROUP_COUNT
 
       type(student) :: stud 
       integer       :: In, Out, IO, i, sizeOfOneStud
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
+      read (In, '(i7)') GROUP_COUNT
       sizeOfOneStud = (SURNAME_LEN+INITIALS_LEN+2)*CH_ + I_
       open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneStud)
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
@@ -33,13 +35,15 @@ contains
       close (In)
    end subroutine CreateDataFile
 
-   function ReadGroup(data_file) result(group)
+   function ReadGroup(data_file, GROUP_COUNT) result(group)
       character(*),intent(in)    :: data_file
-      type(student) :: group(GROUP_COUNT)
-      
+      integer, intent(in)        :: GROUP_COUNT
+
+      type(student), allocatable :: group(:)
       integer :: i, In, IO, sizeOfOneStud
       
-      sizeOfOneStud = (SURNAME_LEN  + INITIALS_LEN+2)*CH_  + I_
+      sizeOfOneStud = (SURNAME_LEN + INITIALS_LEN+2)*CH_ + I_
+      allocate(group(GROUP_COUNT))
       open (file=data_file, form='unformatted', newunit=In, access='direct', recl=sizeOfOneStud)
       do i = 1, GROUP_COUNT
          read (In, iostat=IO, rec=i) group(i) 
@@ -51,7 +55,7 @@ contains
    
    subroutine WriteGroup(output_file, Group, writeFilePostion, writeLetter)
       character(*), intent(in)  :: output_file, writeFilePostion, writeLetter
-      type(student), intent(in) :: Group(GROUP_COUNT)
+      type(student), allocatable, intent(in) :: Group(:)
 
       integer :: Out = 0, IO = 0
       character(:), allocatable :: format

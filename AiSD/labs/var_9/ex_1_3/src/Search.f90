@@ -5,10 +5,11 @@ module SearchesGroup
    implicit none
 
 contains
-   pure function SearchFirstForAlph(Group) result(searchIndex)
-      type(student), intent(in) :: Group(GROUP_COUNT)
+   pure function SearchFirstForAlph(Group, GROUP_COUNT) result(searchIndex)
+      type(student), allocatable, intent(in) :: Group(:)
+      integer, intent(in)                    :: GROUP_COUNT
 
-      integer :: searchIndex, i  
+      integer :: searchIndex, i
 
       searchIndex = 1
       do i = 2, GROUP_COUNT
@@ -20,7 +21,7 @@ contains
    end function SearchFirstForAlph 
 
    pure function SearchYoungest(Group) result(searchIndex)
-      type(student), intent(in) :: Group(GROUP_COUNT)
+      type(student), allocatable, intent(in) :: Group(:)
 
       integer :: searchIndex  
 

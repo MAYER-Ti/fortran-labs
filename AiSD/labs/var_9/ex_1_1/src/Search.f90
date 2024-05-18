@@ -6,12 +6,11 @@ module SearchesGroup
 
 contains
    pure function SearchFirstForAlph(Surnames) result(searchIndex)
-      character(SURNAME_LEN, kind=CH_), intent(in) :: Surnames(GROUP_COUNT)
+      character(SURNAME_LEN, kind=CH_), allocatable, intent(in) :: Surnames(:)
  
-      integer :: searchIndex, i  
+      integer :: searchIndex, i, GROUP_COUNT
       
-      !searchIndex = FindLoc(Surnames, MinVal(Surnames, 1), 1)
-      !searchIndex = maxLoc(Surnames(:), 1) 
+      GROUP_COUNT = Ubound(Surnames, 1) 
       searchIndex = 1
       do i = 2, GROUP_COUNT
          if(Surnames(searchIndex) > Surnames(i)) then
@@ -22,7 +21,7 @@ contains
    end function SearchFirstForAlph 
 
    pure function SearchYoungest(Dates) result(searchIndex)
-      integer, intent(in) :: Dates(GROUP_COUNT)
+      integer, allocatable, intent(in) :: Dates(:)
  
       integer :: searchIndex 
 

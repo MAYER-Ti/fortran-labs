@@ -4,14 +4,15 @@ module calcPositions
    implicit none
 
 contains
-    pure subroutine CalcPos(empls, outPos, outCount, countPositions)
+    pure subroutine CalcPos(empls, EMPLOYEE_COUNT, outPos, outCount)
         type(employees), intent(in)                              :: empls
         character(BLOCK_LEN, kind=CH_), allocatable, intent(out) :: outPos(:) 
         integer, allocatable, intent(out)                        :: outCount(:)
-        integer, intent(inout)                                   :: countPositions   
-        
+        integer, intent(in)                                      :: EMPLOYEE_COUNT
+
+        integer :: countPositions   
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
-        integer :: i, j, posAndCount(2, EMPLOYEE_COUNT)
+        integer :: i, posAndCount(2, EMPLOYEE_COUNT)
 
         countPositions = 0 
         matched = .false.

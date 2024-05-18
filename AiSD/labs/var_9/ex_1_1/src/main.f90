@@ -20,22 +20,27 @@ program ex_1_1
 
    implicit none
    !integer, parameter       :: BLOCK_LEN = 15, EMPLOYEE_COUNT  = 5
-   character(*), parameter  :: input_file = "../data/class.txt" , output_file = "output.txt"
+   character(*), parameter :: input_file = "../data/class.txt", output_file = "output.txt"
    ! Массивы фамилий, инициалов и года рождения 
-   character(SURNAME_LEN, kind=CH_)  :: Surnames(GROUP_COUNT) = ""
-   character(INITIALS_LEN, kind=CH_) :: Initials(GROUP_COUNT) = ""
-   integer                           :: Dates(GROUP_COUNT) = 0
+   character(SURNAME_LEN, kind=CH_), allocatable  :: Surnames(:)
+   character(INITIALS_LEN, kind=CH_), allocatable :: Initials(:)
+   integer, allocatable                           :: Dates(:)
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   integer                           :: indexFirstForAlph = 0, indexYoungest = 0
+   integer  :: indexFirstForAlph = 0, indexYoungest = 0
+   real(8):: start_time = 0, end_time = 0
    ! Ввод данных
    call ReadGroup(input_file, Surnames, Initials, Dates) 
    ! Вывод исходных данных
-   call WriteGroup(output_file, Surnames, Initials, Dates, 'rewind', 'Входные данные')
+   !call WriteGroup(output_file, Surnames, Initials, Dates, 'rewind', 'Входные данные')
+   call cpu_time(start_time)
    ! Обработка данных
    ! Найти первого работника по алфавиту
    indexFirstForAlph = SearchFirstForAlph(Surnames) 
    ! Найти самого молодого
    indexYoungest = SearchYoungest(Dates)
+
+   call cpu_time(end_time)
+   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
    ! Вывод обработанных данных.
    call WriteElement(output_file, Surnames(indexFirstForAlph), Initials(indexFirstForAlph), Dates(indexFirstForAlph),&
        'append', 'Первый по алфавиту:')

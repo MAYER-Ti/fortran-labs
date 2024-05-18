@@ -2,7 +2,7 @@ module IOGroup
    use Environment
    implicit none
 
-   integer, parameter ::  GROUP_COUNT = 7, SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
+   integer, parameter :: SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
 
    type student
       character(SURNAME_LEN, kind=CH_)  :: sur

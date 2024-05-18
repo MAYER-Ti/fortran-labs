@@ -2,45 +2,50 @@ module IOGroup
    use Environment
    implicit none
 
-   integer, parameter ::  GROUP_COUNT = 7, SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
+   integer, parameter :: SURNAME_LEN = 15, INITIALS_LEN = 5, DATE_LEN = 4
 
    type student
-      character(SURNAME_LEN, kind=CH_)  :: sur(GROUP_COUNT)
-      character(INITIALS_LEN, kind=CH_) :: init(GROUP_COUNT)
-      integer                           :: date(GROUP_COUNT)
+      character(SURNAME_LEN, kind=CH_), allocatable  :: sur(:)
+      character(INITIALS_LEN, kind=CH_), allocatable :: init(:)
+      integer, allocatable                           :: date(:)
    end type student
 contains
-   subroutine CreateDataFile(input_file, data_file)
+   subroutine CreateDataFile(input_file, data_file, GROUP_COUNT)
       character(*), intent(in) :: input_file, data_file
+      integer, intent(inout)   :: GROUP_COUNT
 
-      type(student) :: stud 
+      type(student) :: studs 
       integer       :: In, Out, IO, i
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
+         read(In, '(i7)') GROUP_COUNT
+         allocate(studs%sur(GROUP_COUNT), studs%init(GROUP_COUNT), studs%date(GROUP_COUNT))
       open (file=data_file, form='unformatted', newunit=Out, access='stream')
-         format = '(:a, 1x, a, 1x, i'//DATE_LEN//')'
+         format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
          do i = 1, GROUP_COUNT
             ! Чтение входного файла
-            read (In, format, iostat=IO) stud%sur(i), stud%init(i), stud%date(i)
+            read (In, format, iostat=IO) studs%sur(i), studs%init(i), studs%date(i)
             call Handle_IO_status(IO, "Ошибка чтения из входного файла-"//i)
          end do
          ! Запись в бинарный файл
-         write (Out, iostat=IO) stud%sur, stud%init, stud%date
+         write (Out, iostat=IO) studs%sur, studs%init, studs%date
          call Handle_IO_status(IO, "Ошибка записи в бинарный файл!")
       close (Out)
       close (In)
    end subroutine CreateDataFile
 
-   function ReadGroup(data_file) result(group)
+   function ReadGroup(data_file, GROUP_COUNT) result(group)
       character(*),intent(in) :: data_file
+      integer, intent(in)     :: GROUP_COUNT
       type(student)           :: Group
       
       integer :: In, IO
       
+      allocate(Group%sur(GROUP_COUNT), Group%init(GROUP_COUNT), Group%date(GROUP_COUNT))
       open (file=data_file, form='unformatted', newunit=In, access='stream')
-      read (In, iostat=IO) Group%sur, Group%init, Group%date
-      call Handle_IO_status(IO, "Ошибка чтения данных")
+         read (In, iostat=IO) Group%sur, Group%init, Group%date
+         call Handle_IO_status(IO, "Ошибка чтения данных")
       close (In)
    end function ReadGroup 
    
@@ -48,9 +53,9 @@ contains
       character(*), intent(in)  :: output_file, writeFilePostion, writeLetter
       type(student), intent(in) :: Group
 
-      integer :: Out, IO, i
+      integer :: Out, IO, i, GROUP_COUNT
       character(:), allocatable :: format
-
+      GROUP_COUNT = Ubound(Group%sur, 1) 
       open (file=output_file, encoding=E_,position=writeFilePostion, newunit=Out)
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'
          write(Out, '(a)') writeLetter

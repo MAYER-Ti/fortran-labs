@@ -21,6 +21,7 @@ program ex_1_6a
 
    implicit none
    character(*), parameter :: input_file  = "../data/class.txt", output_file = "output.txt"
+   real(8)                          :: start_time = 0, end_time = 0
    ! Массивы фамилий, инициалов и года рождения 
    type(student), pointer  :: Group
    type(student), pointer :: studFirstAlph
@@ -28,14 +29,17 @@ program ex_1_6a
    ! Ввод данных
    Group => ReadGroup(input_file) 
    ! Вывод исходных данных
-   call WriteGroup(output_file, Group, 'rewind', 'Входные данные')
+   !call WriteGroup(output_file, Group, 'rewind', 'Входные данные')
    ! Обработка данных
+   call cpu_time(start_time)
    ! Найти первого работника по алфавиту
    call FirstForAlph(studFirstAlph, Group, Group) 
    ! Найти самого молодого
    call Youngest(studYougest, Group, Group)
+   call cpu_time(end_time)
+   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
    ! Вывод обработанных данных.
-   call WriteElement(output_file, studFirstAlph, 'append', 'Первый по алфавиту:')
+   call WriteElement(output_file, studFirstAlph, 'rewind', 'Первый по алфавиту:')
    call WriteElement(output_file, studYougest, 'append', 'Самый молодой:')
 
 end program ex_1_6a

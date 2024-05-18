@@ -44,7 +44,7 @@ program ex_1_1
    call  CalcPos(positions, Ubound(positions, 1), Poss, Counts) 
    
    call system_clock(count=end_time)
-   elapsed_time = real(end_time-start_time)/real(cpu_time)
+   elapsed_time = real(end_time-start_time)/real(cpu_time) * 1000
    print *, start_time, end_time
    print *, 'Время выполнения', elapsed_time, 'миллисекунд'
    ! Вывод обработанных данных.
