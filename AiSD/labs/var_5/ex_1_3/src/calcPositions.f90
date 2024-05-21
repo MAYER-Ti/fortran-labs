@@ -9,11 +9,9 @@ contains
         character(BLOCK_LEN, kind=CH_), allocatable, intent(out) :: outPos(:) 
         integer, allocatable, intent(out)                        :: outCount(:)
         integer, intent(in)                                      :: EMPLOYEE_COUNT
-
         integer :: countPositions   
         logical :: matched(EMPLOYEE_COUNT), locPosition(EMPLOYEE_COUNT)
-        integer :: i, j, posAndCount(2, EMPLOYEE_COUNT)
-
+        integer :: i, posAndCount(2, EMPLOYEE_COUNT)
         countPositions = 0 
         matched = .false.
         locPosition = .false.
@@ -25,24 +23,20 @@ contains
                ! Совпадает сама с собой 
                locPosition(i) = .true.
                ! Создание маски 
-               do concurrent (j = i+1:EMPLOYEE_COUNT)
-                  locPosition(j) = employees(j)%pos == employees(i)%pos
-               end do
+               locPosition(i+1:) = employees(i+1:)%pos == employees(i)%pos
                ! Записать количество одинаковых должностей 
                posAndCount(1, countPositions) = i ! Позиция с должностью 
                posAndCount(2, countPositions) = Count(locPosition) ! Кол-во сотрудников с этой должностью
                ! Обновить массив совпадений для следующих итераций цикла
-               matched(i:EMPLOYEE_COUNT) = matched(i:EMPLOYEE_COUNT) .or. locPosition(i:EMPLOYEE_COUNT)
+               matched(i:) = matched(i:) .or. locPosition(i:)
                locPosition = .false.
            end if
         end do
         ! Запись данных в массивы
         allocate(outPos(countPositions), outCount(countPositions))
-        do i = 1, countPositions
-          outPos(i) = employees(posAndCount(1, i))%pos
-          outCount(i) = posAndCount(2, i) 
-        end do
+!        do i = 1, countPositions
+          outPos(:) = employees(posAndCount(1, :countPositions))%pos
+          outCount(:) = posAndCount(2, :countPositions) 
+!        end do
    end subroutine CalcPos 
-
-
 end module calcPositions 

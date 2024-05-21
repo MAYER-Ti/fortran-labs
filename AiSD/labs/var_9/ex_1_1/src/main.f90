@@ -26,24 +26,25 @@ program ex_1_1
    character(INITIALS_LEN, kind=CH_), allocatable :: Initials(:)
    integer, allocatable                           :: Dates(:)
    ! Массивы где хранится  должности и количество сотрудников этой должности
-   integer  :: indexFirstForAlph = 0, indexYoungest = 0
+   integer  :: indexFirstForAlph = 0, indexYoungest = 0, GROUP_COUNT = 0
    real(8):: start_time = 0, end_time = 0
    ! Ввод данных
    call ReadGroup(input_file, Surnames, Initials, Dates) 
+   GROUP_COUNT = Ubound(Surnames, 1)
    ! Вывод исходных данных
    !call WriteGroup(output_file, Surnames, Initials, Dates, 'rewind', 'Входные данные')
    call cpu_time(start_time)
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   indexFirstForAlph = SearchFirstForAlph(Surnames) 
+   indexFirstForAlph = SearchFirstForAlph(Surnames, GROUP_COUNT) 
    ! Найти самого молодого
    indexYoungest = SearchYoungest(Dates)
 
    call cpu_time(end_time)
-   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
+   print *, 'Время выполнения', (end_time-start_time), 's'
    ! Вывод обработанных данных.
    call WriteElement(output_file, Surnames(indexFirstForAlph), Initials(indexFirstForAlph), Dates(indexFirstForAlph),&
-       'append', 'Первый по алфавиту:')
+       'rewind', 'Первый по алфавиту:')
    call WriteElement(output_file, Surnames(indexYoungest), Initials(indexYoungest), Dates(indexYoungest),&
        'append', 'Самый молодой:')
 

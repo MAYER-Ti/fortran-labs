@@ -22,8 +22,8 @@ program ex_1_1
    use globalVars
    implicit none
 
-   integer :: cpu_time = 0, start_time = 0, end_time = 0
-   real(R_) :: elapsed_time = 0.0
+   real(8) :: start_time = 0, end_time = 0
+   integer  :: EMPLOYEE_COUNT = 0
 
    !integer, parameter       :: BLOCK_LEN = 15, EMPLOYEE_COUNT  = 5
    character(*), parameter  :: input_file = "../data/class.txt" , output_file = "output.txt"
@@ -34,19 +34,16 @@ program ex_1_1
    integer, allocatable                        :: Counts(:)
 
    ! Ввод данных
-   call ReadEmployee(input_file, surnames, positions) 
+   call ReadEmployee(input_file, surnames, positions, EMPLOYEE_COUNT) 
+   !EMPLOYEE_COUNT = Ubound(positions, 1)
    ! Вывод исходных данных
    !call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
 
-   call system_clock(count_rate=cpu_time)
-   call system_clock(count=start_time)
-   ! Обработка данных
-   call  CalcPos(positions, Ubound(positions, 1), Poss, Counts) 
-   
-   call system_clock(count=end_time)
-   elapsed_time = real(end_time-start_time)/real(cpu_time) * 1000
-   print *, start_time, end_time
-   print *, 'Время выполнения', elapsed_time, 'миллисекунд'
+   !call system_clock(count_rate=rate)
+   call cpu_time(start_time) ! Обработка данных
+   call  CalcPos(positions, EMPLOYEE_COUNT, Poss, Counts) 
+   call cpu_time(end_time)
+   print *, 'Время выполнения: ', real(end_time - start_time), 's'
    ! Вывод обработанных данных.
    call WriteCountPositions(output_file, Poss, counts, 'append', 'Кол-во должностей')
 

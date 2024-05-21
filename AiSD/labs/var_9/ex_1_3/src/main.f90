@@ -41,9 +41,9 @@ program ex_1_3
    indexYoungest = SearchYoungest(Group)
 
    call cpu_time(end_time)
-   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
+   print *, 'Время выполнения', (end_time-start_time), 'миллисекунд'
    ! Вывод обработанных данных.
-   call WriteElement(output_file, Group(indexFirstForAlph), 'append', 'Первый по алфавиту:')
+   call WriteElement(output_file, Group(indexFirstForAlph), 'rewind', 'Первый по алфавиту:')
    call WriteElement(output_file, Group(indexYoungest), 'append', 'Самый молодой:')
 
 end program ex_1_3

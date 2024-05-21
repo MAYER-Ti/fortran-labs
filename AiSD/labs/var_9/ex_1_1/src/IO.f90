@@ -14,7 +14,7 @@ contains
       integer :: i = 0, In = 0, IO = 0, GROUP_COUNT = 0
 
       open (file=input_file, encoding=E_, newunit=In)
-         read (In, '(i7)') GROUP_COUNT
+         read (In, '(i15)') GROUP_COUNT
          allocate(Surnames(GROUP_COUNT), Initials(GROUP_COUNT), Dates(GROUP_COUNT))
          read (In, '(a, 1x, a, 1x, i'//DATE_LEN//')', iostat=IO) (Surnames(i), Initials(i), Dates(i), i = 1, GROUP_COUNT)
          call Handle_IO_status(IO, "reading group list")

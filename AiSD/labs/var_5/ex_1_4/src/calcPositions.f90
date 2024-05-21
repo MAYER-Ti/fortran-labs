@@ -36,10 +36,8 @@ contains
         end do
         ! Запись данных в массивы
         allocate(outPos(countPositions), outCount(countPositions))
-        do i = 1, countPositions
-          outPos(i) = empls%pos(posAndCount(1, i))
-          outCount(i) = posAndCount(2, i) 
-        end do
+        outPos(:) = empls%pos(posAndCount(1, :countPositions))
+        outCount(:) = posAndCount(2, :countPositions) 
    end subroutine CalcPos 
 
 

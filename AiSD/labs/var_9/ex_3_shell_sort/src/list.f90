@@ -2,7 +2,7 @@ module mod_list
    use Environment
 
    implicit none
-   private
+!   private
 
    type, public :: node
       character(:, kind=CH_), allocatable :: string
@@ -46,15 +46,29 @@ contains
    pure recursive subroutine Swap(left, right, gap, i)
       type(node), allocatable, intent(inout) :: left, right
       integer, intent(in) :: gap, i
-      type(node), allocatable :: tmp 
+      type(node), allocatable :: tmp, tmp2
 
       if(Allocated(right)) then
          !Сравнение
-         if(i == gap .and. left%string < right%string) then 
-            !Поменять
-            call move_alloc(left, tmp)
-            call move_alloc(right, left)
-            call move_alloc(tmp, right)
+         if(i == gap) then
+            if( left%string < right%string) then 
+               !Поменять
+              ! call move_alloc(Current, temp)
+              ! call move_alloc(temp%next, Current)
+              ! call move_alloc(Current%next, temp%next)
+              ! call move_alloc(temp, Current%next)
+
+              ! call move_alloc(left, tmp)
+              ! call move_alloc(right, left)
+              ! call move_alloc(left%next, tmp2)
+              ! call move_alloc(tmp, right)
+              ! call move_alloc(right%next, left%next)
+              ! call move_alloc(tmp2, right%next)
+
+              ! call move_alloc(left, tmp)
+              ! call move_alloc(right, left)
+              ! call move_alloc(tmp, right)
+            end if
          else
             call Swap(left, right%next, gap, i+1)
          end if

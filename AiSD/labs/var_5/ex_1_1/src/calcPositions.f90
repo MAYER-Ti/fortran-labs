@@ -9,10 +9,9 @@ contains
       integer, allocatable, intent(out)                          :: outCount(:)
       character(BLOCK_LEN, kind=CH_), allocatable, intent(inout) :: outPos(:)
       integer, intent(in)                                        :: positionsSize
-
       integer :: countPositions   
       logical :: matched(positionsSize), locPosition(positionsSize)
-      integer :: i, posAndCount(2, positionsSize)
+      integer :: i, posAndCount(positionsSize, 2)
       countPositions = 0 
       matched = .false.
       locPosition = .false.
@@ -26,18 +25,15 @@ contains
              ! Создание маски 
              locPosition(i+1:positionsSize) = positions(i+1:positionsSize) == positions(i)
              ! Записать количество одинаковых должностей 
-             posAndCount(1, countPositions) = i ! Позиция с должностью 
-             posAndCount(2, countPositions) = Count(locPosition) ! Кол-во сотрудников с этой должностью
+             posAndCount(countPositions, 1) = i ! Позиция с должностью 
+             posAndCount(countPositions, 2) = Count(locPosition) ! Кол-во сотрудников с этой должностью
              ! Обновить массив совпадений для следующих итераций цикла
              matched(i:positionsSize) = matched(i:positionsSize) .or. locPosition(i:positionsSize)
              locPosition = .false.
          end if
       end do
       allocate(outPos(countPositions), outCount(countPositions))
-      do i = 1, countPositions
-        outPos(i) = positions(posAndCount(1, i))
-        outCount(i) = posAndCount(2, i) 
-      end do   
+      outPos(:)   = positions(posAndCount(:countPositions, 1))
+      outCount(:) = posAndCount(:countPositions, 2) 
    end subroutine CalcPos 
-
 end module calcPositions 

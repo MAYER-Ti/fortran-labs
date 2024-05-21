@@ -4,16 +4,17 @@ module IOEmployee
    implicit none
 
 contains
-   subroutine ReadEmployee(input_file, surnames, positions) 
+   subroutine ReadEmployee(input_file, surnames, positions, EMPLOYEE_COUNT) 
       character(BLOCK_LEN, kind=CH_), allocatable, intent(out) :: surnames(:), positions(:)
+      integer, intent(inout) :: EMPLOYEE_COUNT
       character(*),intent(in) :: input_file
       
-      integer :: i = 0, In = 0, IO = 0, countDatas = 0
+      integer :: i = 0, In = 0, IO = 0
 
       open (file=input_file, encoding=E_, newunit=In)
-         read (In, '(i7)') countDatas 
-         allocate(surnames(countDatas), positions(countDatas))
-         read (In, '(a, 1x, a)', iostat=IO) (surnames(i), positions(i), i = 1, countDatas)
+         read (In, '(i15)') EMPLOYEE_COUNT
+         allocate(surnames(EMPLOYEE_COUNT), positions(EMPLOYEE_COUNT))
+         read (In, '(a, 1x, a)', iostat=IO) (surnames(i), positions(i), i = 1, EMPLOYEE_COUNT)
          call Handle_IO_status(IO, "reading employee list")
       close (In)
 

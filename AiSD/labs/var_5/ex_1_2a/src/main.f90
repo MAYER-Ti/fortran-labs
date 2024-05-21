@@ -23,8 +23,8 @@ program ex_1_2a
    use globalVars
    implicit none
 
-   integer :: cpu_time = 0, start_time = 0, end_time = 0
-   real(R_) :: elapsed_time = 0.0
+   real(8) :: start_time = 0, end_time = 0
+   integer :: EMPLOYEE_COUNT = 0
    ! "../data/class.txt"
    character(*), parameter  :: input_file = "../../ex_1_1/data/class.txt" , output_file = "output.txt"
    ! Массивы фамилий и должностей 
@@ -34,18 +34,17 @@ program ex_1_2a
    integer, allocatable             :: Counts(:)
    ! Ввод данных
    call ReadEmployee(input_file, surnames, positions) 
+   EMPLOYEE_COUNT = Ubound(positions, 1)
    ! Вывод исходных данных
    !call WriteEmployee(output_file, surnames, positions, 'rewind', 'Входные данные')
 
-   call system_clock(count_rate=cpu_time)
-   call system_clock(count=start_time)
+   call cpu_time(start_time)
    ! Обработка данных
-   call  CalcPos(positions, Ubound(positions, 1), Poss, Counts) 
+   call  CalcPos(positions, EMPLOYEE_COUNT, Poss, Counts) 
 
-   call system_clock(count=end_time)
-   elapsed_time = real(end_time-start_time)/real(cpu_time) * 1000
-   print *, start_time, end_time
-   print *, 'Время выполнения', elapsed_time, 'миллисекунд'
+   call cpu_time(end_time)
+   write(*,*) 'Время выполнения', real(end_time-start_time), 's' 
+
    ! Вывод обработанных данных.
    call WriteCountPositions(output_file, Poss, Counts, 'rewind', 'Кол-во должностей')
 

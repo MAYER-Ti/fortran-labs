@@ -19,7 +19,7 @@ contains
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-         read(In, '(i7)') GROUP_COUNT
+         read(In, '(i15)') GROUP_COUNT
          allocate(studs%sur(GROUP_COUNT), studs%init(GROUP_COUNT), studs%date(GROUP_COUNT))
       open (file=data_file, form='unformatted', newunit=Out, access='stream')
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'

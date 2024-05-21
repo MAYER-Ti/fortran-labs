@@ -9,11 +9,9 @@ contains
         character(kind=CH_), allocatable, intent(out) :: outPos(:,:) 
         integer, allocatable, intent(out)             :: outCount(:)
         integer, intent(in)                           :: positionsSize  
-        
         integer :: countPositions
         logical :: matched(positionsSize), locPosition(positionsSize)
         integer :: i, j, posAndCount(2, positionsSize)
-
         countPositions = 0 
         matched = .false.
         locPosition = .false.
@@ -40,10 +38,10 @@ contains
         end do
         ! Запись данных в массивы
         allocate(outPos(BLOCK_LEN, countPositions), outCount(countPositions))
-        do i = 1, countPositions
-          outPos(:,i) = positions(:, posAndCount(1, i))
-          outCount(i) = posAndCount(2, i) 
-        end do
+        !do i = 1, countPositions
+          outPos(:,:) = positions(:, posAndCount(1, :countPositions))
+          outCount(:) = posAndCount(2, :countPositions) 
+        !end do
    end subroutine CalcPos 
 
 

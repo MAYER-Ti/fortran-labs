@@ -11,7 +11,7 @@ contains
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-         read(In, '(i7)') sizeDatas
+         read(In, '(i15)') sizeDatas
          allocate(surnames(BLOCK_LEN, sizeDatas), positions(BLOCK_LEN, sizeDatas))
          format = '('//BLOCK_LEN//'a1, 1x, '//BLOCK_LEN//'a1)'
          read (In, format, iostat=IO) (surnames(:,i), positions(:,i), i = 1, sizeDatas)

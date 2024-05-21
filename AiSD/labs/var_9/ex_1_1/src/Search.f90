@@ -5,12 +5,12 @@ module SearchesGroup
    implicit none
 
 contains
-   pure function SearchFirstForAlph(Surnames) result(searchIndex)
+   pure function SearchFirstForAlph(Surnames, GROUP_COUNT) result(searchIndex)
       character(SURNAME_LEN, kind=CH_), allocatable, intent(in) :: Surnames(:)
+      integer, intent(in) :: GROUP_COUNT
  
-      integer :: searchIndex, i, GROUP_COUNT
+      integer :: searchIndex, i
       
-      GROUP_COUNT = Ubound(Surnames, 1) 
       searchIndex = 1
       do i = 2, GROUP_COUNT
          if(Surnames(searchIndex) > Surnames(i)) then

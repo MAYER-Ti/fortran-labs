@@ -24,7 +24,7 @@ contains
        open (file=input_file, encoding=E_, newunit=In)
        sizeOfOneEmployee = (BLOCK_LEN*2+1)*CH_ 
        open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneEmployee)
-          read (In, '(i7)') EMPLOYEE_COUNT
+          read (In, '(i15)') EMPLOYEE_COUNT
           format = '(a, 1x, a)'
           do i = 1, EMPLOYEE_COUNT
              ! Чтение из входного файла

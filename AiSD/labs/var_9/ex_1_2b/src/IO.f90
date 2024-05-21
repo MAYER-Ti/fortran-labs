@@ -15,7 +15,7 @@ contains
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-         read (In, '(i7)') GROUP_COUNT
+         read (In, '(i15)') GROUP_COUNT
          allocate(Surnames(SURNAME_LEN, GROUP_COUNT), Initials(INITIALS_LEN, GROUP_COUNT), Dates(GROUP_COUNT))
          format = '('//SURNAME_LEN//'a1, 1x, '//INITIALS_LEN//'a1, 1x, i'//DATE_LEN//')'
          read (In, format, iostat=IO) (Surnames(:, i), Initials(:, i), Dates(i), i = 1, GROUP_COUNT)

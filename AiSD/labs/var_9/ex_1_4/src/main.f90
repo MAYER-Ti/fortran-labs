@@ -35,11 +35,11 @@ program ex_1_4
    call cpu_time(start_time)
    ! Обработка данных
    ! Найти первого работника по алфавиту
-   indexFirstForAlph = SearchFirstForAlph(Group%sur, Ubound(Group%sur, 1)) 
+   indexFirstForAlph = SearchFirstForAlph(Group%sur, GROUP_COUNT) 
    ! Найти самого молодого
    indexYoungest = MaxLoc(Group%date, 1)
    call cpu_time(end_time)
-   print *, 'Время выполнения', (end_time-start_time) * 1000, 'миллисекунд'
+   print *, 'Время выполнения', (end_time-start_time), 'миллисекунд'
    ! Вывод обработанных данных.
    call WriteElement(output_file, Group%sur(indexFirstForAlph), Group%init(indexFirstForAlph), Group%date(indexFirstForAlph), &
          'append', 'Первый по алфавиту:')

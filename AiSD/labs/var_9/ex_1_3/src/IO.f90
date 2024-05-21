@@ -19,7 +19,7 @@ contains
       character(:), allocatable :: format
 
       open (file=input_file, encoding=E_, newunit=In)
-      read (In, '(i7)') GROUP_COUNT
+      read (In, '(i15)') GROUP_COUNT
       sizeOfOneStud = (SURNAME_LEN+INITIALS_LEN+2)*CH_ + I_
       open (file=data_file, form='unformatted', newunit=Out, access='direct', recl=sizeOfOneStud)
          format = '(a, 1x, a, 1x, i'//DATE_LEN//')'

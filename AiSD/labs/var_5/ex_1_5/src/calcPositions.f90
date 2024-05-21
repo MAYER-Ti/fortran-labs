@@ -20,10 +20,10 @@ contains
         ! Запись полученных данных 
         allocate(Res%pos(sizeCountAndPos), Res%counts(sizeCountAndPos))
         Res%sizePos = sizeCountAndPos
-        do i = 1, Res%sizePos 
-           Res%pos(i)    = positions(OutCountAndPos(1,i))
-           Res%counts(i) = OutCountAndPos(2,i)
-        end do
+        !do i = 1, Res%sizePos 
+           Res%pos(:)    = positions(OutCountAndPos(1,:sizeCountAndPos))
+           Res%counts(:) = OutCountAndPos(2,:sizeCountAndPos)
+        !end do
 
     end subroutine SearchPositions   
 
